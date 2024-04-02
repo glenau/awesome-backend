@@ -15,7 +15,9 @@ async function run() {
     const majorVersion = parseInt(nodeVersion.slice(1), 10);
 
     if (majorVersion < 20) {
-        console.log(chalk.yellow('The minimum required Node.js version is 20 or higher. Please update your version and try again.'));
+        console.log(chalk.yellow('The minimum required Node.js version is 20 or higher. Please update your version and try again:'));
+        console.log(chalk('Current version: ') + nodeVersion);
+        console.log(chalk('Download new version: https://nodejs.org/en/download'));
         return;
     } else {
         console.log(

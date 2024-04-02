@@ -136,6 +136,8 @@ dist
 
 #project
 package-lock.json
+.prettierrc
+.prettierignore
 
 # Generate output
 build

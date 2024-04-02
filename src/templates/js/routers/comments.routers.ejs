@@ -1,0 +1,14 @@
+<% if(webFramework === 'express') { -%>
+import { Router } from 'express';
+import CommentController from '../controllers/comment.controller.js';
+
+const router = Router();
+
+router.post('/', CommentController.createComment);
+router.get('/', CommentController.getComments);
+router.get('/:id', CommentController.getCommentByID);
+router.put('/:id', CommentController.updateComment);
+router.delete('/:id', CommentController.deleteComment);
+
+export default router;
+<% } -%>

@@ -30,6 +30,7 @@ async function run() {
     try {
         const answers = await Questions.start();
         const result = await new Generation(answers).start();
+        console.log(chalk.blue.bold('Great! Now open your project and run it using the npm command: ' + chalk.green.bold('npm start')));
     } catch (error) {
         console.log(chalk.red.bold(error));
     }

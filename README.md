@@ -1,6 +1,4 @@
-[![awesome-backend Logo](https://github.com/glenau/awesome-backend/blob/main/logo.png)](https://github.com/glenau/awesome-backend)
-
-CLI tool for generating server side on [Node.js](http://nodejs.org).
+CLI tool for generating server side on [Node.js](https://nodejs.org).
 
 ## Installation
 

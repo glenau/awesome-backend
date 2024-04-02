@@ -1,0 +1,27 @@
+{
+    "name": "awesome-backend",
+    "version": "0.0.1",
+    "description": "CLI tool for generating server side on Node.js",
+    "author": "Gleb Naumov <glenaudev@gmail.com",
+    "license": "MIT",
+    "homepage": "https://github.com/glenau/awesome-backend#readme",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/glenau/awesome-backend.git"
+    },
+    "bugs": {
+        "url": "https://github.com/glenau/awesome-backend/issues"
+    },
+    "main": "bin/cli.js",
+    "bin": {
+        "awesome-backend": "bin/cli.js"
+    },
+    "engines": {
+        "node": ">=20"
+    },
+    "type": "module",
+    "dependencies": {
+        "ejs": "^3.1.9",
+        "inquirer": "^9.2.17"
+    }
+}

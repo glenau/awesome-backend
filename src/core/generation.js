@@ -5,6 +5,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import ejs from 'ejs';
 import chalk from 'chalk';
 import { exec } from 'child_process';
@@ -27,7 +28,8 @@ class Generation {
     }
 
     setProjectTemplatePath() {
-        return path.join(process.cwd(), 'src/templates/js');
+        const currentDir = path.dirname(fileURLToPath(import.meta.url));
+        return path.join(currentDir, '..', 'templates/js');
     }
 
     setProjectFolders() {

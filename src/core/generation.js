@@ -37,7 +37,7 @@ class Generation {
     }
 
     setProjectDependencies() {
-        const dependencies = ['dotenv', 'helmet'];
+        const dependencies = ['dotenv', 'helmet', 'chalk'];
         dependencies.push(this.answers.webFramework);
         if (this.answers.database) {
             dependencies.push(this.answers.databaseOML);

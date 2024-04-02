@@ -1,0 +1,14 @@
+<% if(webFramework === 'express') { -%>
+import { Router } from 'express';
+import ArticleController from '../controllers/article.controller.js';
+
+const router = Router();
+
+router.post('/', ArticleController.createArticle);
+router.get('/', ArticleController.getArticles);
+router.get('/:id', ArticleController.getArticleByID);
+router.put('/:id', ArticleController.updateArticle);
+router.delete('/:id', ArticleController.deleteArticle);
+
+export default router;    
+<% } -%>

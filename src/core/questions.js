@@ -4,6 +4,7 @@
 */
 
 import inquirer from 'inquirer';
+import chalk from 'chalk';
 
 class Questions {
     constructor() {
@@ -12,6 +13,7 @@ class Questions {
                 type: 'input',
                 name: 'projectName',
                 message: 'What is the name of your project?',
+                default: 'awesome-backend',
                 validate: function (value) {
                     if (/^(?:(?:@(?:[a-z0-9-*~][a-z0-9-*._~]*)?\/[a-z0-9-._~])|[a-z0-9-~])[a-z0-9-._~]*$/.test(value)) {
                         return true;
@@ -76,8 +78,8 @@ class Questions {
                 message: 'Where to create a project?',
                 choices: function (answers) {
                     return [
-                        { name: 'In the current folder', value: 'current' },
                         { name: `In a folder with the project name '${answers.projectName}'`, value: 'new' },
+                        { name: 'In the current folder', value: 'current' },
                     ];
                 },
             },
@@ -89,7 +91,7 @@ class Questions {
             const answers = await inquirer.prompt(this.questions);
             return answers;
         } catch (error) {
-            console.log(error);
+            console.log(chalk.red.bold(error));
         }
     }
 }

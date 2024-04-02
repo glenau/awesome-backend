@@ -14,6 +14,7 @@ class Generation {
         this.answers = answers;
         this.projectPath = this.setProjectPath();
         this.projectTemplatePath = this.setProjectTemplatePath();
+        this.projectFolders = this.setProjectFolders();
     }
 
     setProjectPath() {
@@ -29,33 +30,32 @@ class Generation {
         return path.join(projectTemplatePath, 'src/templates/js');
     }
 
+    setProjectFolders() {
+        return ['config', 'controllers', 'middlewares', 'routers', 'services', 'utils', 'models'];
+    }
+
     async start() {
+        console.log(chalk.blue.bold('\nStarting the project generation process:'));
         try {
             await this.createFolders();
             await this.createPackageFile();
             await this.createProjectFilesFromTemplates();
             await this.installDependencies();
         } catch (error) {
-            console.log(error);
+            console.log(chalk.red.bold(error));
         }
     }
 
     async createFolders() {
-        const foldersToCreate = ['config', 'controllers', 'middlewares', 'routes', 'services', 'utils'];
-
-        if (this.answers.database) {
-            foldersToCreate.push('models');
-        }
-
-        for (const folder of foldersToCreate) {
+        for (const folder of this.projectFolders) {
             const folderPath = path.join(this.projectPath, folder);
             try {
                 await fs.promises.mkdir(folderPath, { recursive: true });
             } catch (error) {
-                console.error(`Error creating folder ${folderPath}: ${error}`);
+                console.error(chalk.red.bold(`Error creating folder ${folderPath}: ${error}`));
             }
         }
-        console.log('Step 1 - Creation of the project architecture - OK');
+        console.log('[Step 1: Creation of the project architecture] - ' + chalk.green.bold('OK'));
     }
 
     async createPackageFile() {
@@ -72,16 +72,15 @@ class Generation {
             },
         };
         fs.writeFileSync(packagePath, JSON.stringify(packageData, null, 4), 'utf8');
-        console.log('Step 2 - Create package.json - OK');
+        console.log('[Step 2: Create package.json] - ' + chalk.green.bold('OK'));
     }
 
     async createProjectFilesFromTemplates() {
-        const projectFiles = ['.env', '.env.example', '.gitignore', 'config/env.ejs', 'index.ejs'];
-
+        const projectFiles = await this.getProjectFiles(this.projectTemplatePath);
         for (const fileName of projectFiles) {
             await this.generateAndWriteFile(fileName);
         }
-        console.log('Step 3 - Generating Project Files - OK');
+        console.log('[Step 3: Generating Project Files] - ' + chalk.green.bold('OK'));
     }
 
     async generateAndWriteFile(fileName) {
@@ -92,8 +91,24 @@ class Generation {
             const str = await ejs.renderFile(fileTemplatePath, this.answers);
             fs.writeFileSync(fileProjectPath, str);
         } catch (error) {
-            console.error(`Error generating file ${fileName}: ${error}`);
+            console.error(chalk.red.bold(`Error generating file ${fileName}: ${error}`));
         }
+    }
+
+    async getProjectFiles(directoryPath) {
+        let files = [];
+        const items = await fs.promises.readdir(directoryPath);
+        for (const item of items) {
+            const itemPath = path.join(directoryPath, item);
+            const stats = await fs.promises.stat(itemPath);
+            if (stats.isDirectory()) {
+                const subFiles = await this.getProjectFiles(itemPath);
+                files = files.concat(subFiles.map((file) => path.join(item, file)));
+            } else {
+                files.push(item);
+            }
+        }
+        return files;
     }
 
     async installDependencies() {
@@ -110,13 +125,13 @@ class Generation {
         return new Promise((resolve, reject) => {
             exec(command, { cwd: this.projectPath }, (error, stdout, stderr) => {
                 if (error) {
-                    console.error(`Error installing dependencies: ${error.message}`);
+                    console.error(chalk.red.bold(`Error installing dependencies: ${error.message}`));
                     reject(error);
                 } else if (stderr) {
-                    console.error(`Error installing dependencies: ${stderr}`);
+                    console.error(chalk.red.bold(`Error installing dependencies: ${stderr}`));
                     reject(new Error(stderr));
                 } else {
-                    console.log('Step 4 - Installing Dependencies - OK');
+                    console.log('[Step 4: Installing Dependencies] - ' + chalk.green.bold('OK\n'));
                     resolve();
                 }
             });

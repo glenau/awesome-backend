@@ -2,11 +2,14 @@
 import express from 'express';
 <% } -%>
 import env from './config/env.js';
+import middlewares from './middlewares/index.js';
     
 <% if(webFramework === 'express') { -%>
 const app = express();
 <% } -%>
 const serverPort = env.serverPort;
+
+middlewares.setupRouters(app);
 
 app.listen(serverPort, () => {
     console.log(`The server is running on the port - [${serverPort}]`);

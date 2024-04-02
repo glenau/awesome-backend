@@ -15,6 +15,7 @@ class Generation {
         this.projectPath = this.setProjectPath();
         this.projectTemplatePath = this.setProjectTemplatePath();
         this.projectFolders = this.setProjectFolders();
+        this.dependencies = this.setProjectDependencies();
     }
 
     setProjectPath() {
@@ -34,19 +35,34 @@ class Generation {
         return ['config', 'controllers', 'middlewares', 'routers', 'services', 'utils', 'models'];
     }
 
+    setProjectDependencies() {
+        const dependencies = ['dotenv', 'helmet'];
+        dependencies.push(this.answers.webFramework);
+        if (this.answers.database) {
+            dependencies.push(this.answers.databaseOML);
+        }
+        return dependencies;
+    }
+
     async start() {
         console.log(chalk.blue.bold('\nStarting the project generation process:'));
         try {
             await this.createFolders();
             await this.createPackageFile();
             await this.createProjectFilesFromTemplates();
-            await this.installDependencies();
+            if (this.answers.dependencies) {
+                await this.installDependencies();
+            } else {
+                console.log(chalk.blue.bold("\nDon't forget to install the required dependencies:"));
+                console.log(chalk.yellow(`npm install ${this.dependencies.join(' ')}\n`));
+            }
         } catch (error) {
             console.log(chalk.red.bold(error));
         }
     }
 
     async createFolders() {
+        process.stdout.write('[Step 1: Creation of the project architecture] - ');
         for (const folder of this.projectFolders) {
             const folderPath = path.join(this.projectPath, folder);
             try {
@@ -55,10 +71,11 @@ class Generation {
                 console.error(chalk.red.bold(`Error creating folder ${folderPath}: ${error}`));
             }
         }
-        console.log('[Step 1: Creation of the project architecture] - ' + chalk.green.bold('OK'));
+        process.stdout.write(chalk.green.bold('OK\n'));
     }
 
     async createPackageFile() {
+        process.stdout.write('[Step 2: Create package.json] - ');
         const packagePath = path.join(this.projectPath, 'package.json');
         const packageData = {
             name: this.answers.projectName,
@@ -72,15 +89,16 @@ class Generation {
             },
         };
         fs.writeFileSync(packagePath, JSON.stringify(packageData, null, 4), 'utf8');
-        console.log('[Step 2: Create package.json] - ' + chalk.green.bold('OK'));
+        process.stdout.write(chalk.green.bold('OK\n'));
     }
 
     async createProjectFilesFromTemplates() {
+        process.stdout.write('[Step 3: Generating Project Files] - ');
         const projectFiles = await this.getProjectFiles(this.projectTemplatePath);
         for (const fileName of projectFiles) {
             await this.generateAndWriteFile(fileName);
         }
-        console.log('[Step 3: Generating Project Files] - ' + chalk.green.bold('OK'));
+        process.stdout.write(chalk.green.bold('OK\n'));
     }
 
     async generateAndWriteFile(fileName) {
@@ -112,15 +130,8 @@ class Generation {
     }
 
     async installDependencies() {
-        const dependencies = ['dotenv'];
-
-        dependencies.push(this.answers.webFramework);
-
-        if (this.answers.database) {
-            dependencies.push(this.answers.databaseOML);
-        }
-
-        const command = `npm install ${dependencies.join(' ')}`;
+        process.stdout.write('[Step 4: Installing Dependencies] - ');
+        const command = `npm install ${this.dependencies.join(' ')}`;
 
         return new Promise((resolve, reject) => {
             exec(command, { cwd: this.projectPath }, (error, stdout, stderr) => {
@@ -131,7 +142,7 @@ class Generation {
                     console.error(chalk.red.bold(`Error installing dependencies: ${stderr}`));
                     reject(new Error(stderr));
                 } else {
-                    console.log('[Step 4: Installing Dependencies] - ' + chalk.green.bold('OK\n'));
+                    process.stdout.write(chalk.green.bold('OK\n'));
                     resolve();
                 }
             });

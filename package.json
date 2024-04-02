@@ -1,6 +1,6 @@
 {
     "name": "awesome-backend",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "CLI tool for generating server side on Node.js",
     "author": "Gleb Naumov <glenaudev@gmail.com",
     "license": "MIT",

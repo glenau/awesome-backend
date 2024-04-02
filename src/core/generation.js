@@ -99,18 +99,18 @@ class Generation {
         for (const fileName of projectFiles) {
             await this.generateAndWriteFile(fileName);
         }
+        await this.generateAndWriteFile('.env.example', '.env');
         process.stdout.write(chalk.green.bold('OK\n'));
     }
 
-    async generateAndWriteFile(fileName) {
-        const fileTemplatePath = path.join(this.projectTemplatePath, fileName);
-        const fileProjectPath = path.join(this.projectPath, fileName.replace(/\.ejs$/, '.js'));
-
+    async generateAndWriteFile(sourceFileName, targetFileName = sourceFileName.replace(/\.ejs$/, '.js')) {
+        const fileTemplatePath = path.join(this.projectTemplatePath, sourceFileName);
+        const fileProjectPath = path.join(this.projectPath, targetFileName);
         try {
             const str = await ejs.renderFile(fileTemplatePath, this.answers);
             fs.writeFileSync(fileProjectPath, str);
         } catch (error) {
-            console.error(chalk.red.bold(`Error generating file ${fileName}: ${error}`));
+            console.error(chalk.red.bold(`Error generating file ${sourceFileName}: ${error}`));
         }
     }
 
@@ -143,7 +143,7 @@ class Generation {
                     console.error(chalk.red.bold(`Error installing dependencies: ${stderr}`));
                     reject(new Error(stderr));
                 } else {
-                    process.stdout.write(chalk.green.bold('OK\n'));
+                    process.stdout.write(chalk.green.bold('OK\n\n'));
                     resolve();
                 }
             });

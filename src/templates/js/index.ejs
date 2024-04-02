@@ -3,16 +3,18 @@ import express from 'express';
 <% } -%>
 import env from './config/env.js';
 import middlewares from './middlewares/index.js';
+import chalk from 'chalk';
     
 <% if(webFramework === 'express') { -%>
 const app = express();
 <% } -%>
 const serverPort = env.serverPort;
 
+middlewares.setupDatabase();
 middlewares.setupSecurityHeaders(app);
 middlewares.setupRouters(app);
 middlewares.setupNotFound(app);
 
 app.listen(serverPort, () => {
-    console.log(`The server is running on the port - [${serverPort}]`);
+    console.log(chalk.green(`The server is running on the port - [${serverPort}]`));
 });

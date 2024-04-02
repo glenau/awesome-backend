@@ -1,0 +1,15 @@
+<% if(database && databaseName === 'MongoDB') { -%>
+import mongoose from 'mongoose';
+<% } -%>
+import env from '../config/env.js';
+import models from '../models/index.js';
+
+<% if(database && databaseName === 'MongoDB') { -%>
+const db = {
+    mongoose,
+    url: env.mongoUrl,
+    models: models,
+};
+
+export default db;
+<% } -%>

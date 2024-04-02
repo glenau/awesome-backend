@@ -1,0 +1,21 @@
+<% if(database && databaseName === 'MongoDB') { -%>
+import { Schema, model } from 'mongoose';
+
+const ArticleSchema = new Schema(
+    {
+        title: {
+            type: String,
+            required: true,
+        },
+        body: {
+            type: String,
+            required: true,
+        }
+    },
+    { versionKey: false },
+);
+
+const Article = model('articles', ArticleSchema);
+
+export default Article;
+<% } -%>

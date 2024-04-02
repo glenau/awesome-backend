@@ -123,18 +123,18 @@ dist
 .vscode-test
 .vscode
 
-# yarn v2
+# Yarn v2
 .yarn/cache
 .yarn/unplugged
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
 
-# macOS
+# MacOS
 .DS_Store
 .DS_Store?
 
-#project
+# Project
 package-lock.json
 
 # Generate output

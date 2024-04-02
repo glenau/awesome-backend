@@ -27,8 +27,7 @@ class Generation {
     }
 
     setProjectTemplatePath() {
-        const projectTemplatePath = process.cwd();
-        return path.join(projectTemplatePath, 'src/templates/js');
+        return path.join(process.cwd(), 'src/templates/js');
     }
 
     setProjectFolders() {

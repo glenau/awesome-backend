@@ -1,0 +1,21 @@
+<% if(database && databaseName === 'MongoDB') { -%>
+import { Schema, model } from 'mongoose';
+
+const ProfileSchema = new Schema(
+    {
+        title: {
+            type: String,
+            required: true,
+        },
+        body: {
+            type: String,
+            required: true,
+        }
+    },
+    { versionKey: false },
+);
+
+const Profile = model('profiles', ProfileSchema);
+
+export default Profile;
+<% } -%>

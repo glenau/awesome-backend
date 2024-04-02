@@ -1,0 +1,21 @@
+<% if(database && databaseName === 'MongoDB') { -%>
+import { Schema, model } from 'mongoose';
+
+const CommentSchema = new Schema(
+    {
+        title: {
+            type: String,
+            required: true,
+        },
+        body: {
+            type: String,
+            required: true,
+        }
+    },
+    { versionKey: false },
+);
+
+const Comment = model('comments', CommentSchema);
+
+export default Comment;
+<% } -%>

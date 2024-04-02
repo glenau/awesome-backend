@@ -83,6 +83,15 @@ class Questions {
                     ];
                 },
             },
+            {
+                type: 'list',
+                name: 'dependencies',
+                message: 'Do you want to install dependencies now?',
+                choices: [
+                    { name: 'Yes', value: true },
+                    { name: 'No', value: false },
+                ],
+            },
         ];
     }
 

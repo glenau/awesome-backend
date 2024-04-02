@@ -1,7 +1,11 @@
+import setupSecurityHeaders from './security.middleware.js';
 import setupRouters from './routers.middleware.js';
+import setupNotFound from './notFound.middleware.js';
 
 const middlewares = {
+    setupSecurityHeaders,
     setupRouters,
+    setupNotFound,
 };
 
 export default middlewares;

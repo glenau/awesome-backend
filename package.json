@@ -2,7 +2,7 @@
     "name": "awesome-backend",
     "version": "0.0.9",
     "description": "CLI tool for generating server side on Node.js",
-    "author": "Gleb Naumov <glenaudev@gmail.com",
+    "author": "Gleb Naumov <glenaudev@gmail.com>",
     "license": "MIT",
     "homepage": "https://github.com/glenau/awesome-backend#readme",
     "repository": {

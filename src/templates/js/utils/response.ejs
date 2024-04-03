@@ -1,0 +1,39 @@
+import logger from './logger.js';
+
+class Response {
+    success(req, res, data, code = 200) {
+        const result = {
+            status: true,
+            data: typeof data === 'string' ? { message: data } : data,
+        };
+
+        res.status(code).json(result);
+
+        logger.info({ result }, `[OUT] [ID:${req.id}] [METHOD:${req.method}] [URL:${req.originalUrl}]`);
+    }
+
+    failure(req, res, data, code = 200, err = null) {
+        const message = data;
+
+        const result = {
+            status: false,
+            message: message,
+        };
+
+        res.status(code).json(result);
+
+        if (err) {
+            logger.error(
+                { result, err },
+                `[OUT] [ID:${req.id}] [METHOD:${req.method}] [URL:${req.originalUrl}]`,
+            );
+        } else {
+            logger.info(
+                { result },
+                `[OUT] [ID:${req.id}] [METHOD:${req.method}] [URL:${req.originalUrl}]`,
+            );
+        }
+    }
+}
+
+export default new Response();

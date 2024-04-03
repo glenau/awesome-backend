@@ -1,16 +1,20 @@
-<% if(database && databaseName === 'MongoDB') { -%>
+<% if(database && databaseNameOML === 'mongoose')  { -%>
 import { Schema, model } from 'mongoose';
 
 const ProfileSchema = new Schema(
     {
-        title: {
+        name: {
             type: String,
-            required: true,
+            required: [true, 'Name is required'],
         },
-        body: {
+        surname: {
             type: String,
-            required: true,
-        }
+            required: [true, 'Surname is required'],
+        },
+        createdAt: {
+            type: Date,
+            default: Date.now,
+        },
     },
     { versionKey: false },
 );

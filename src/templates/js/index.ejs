@@ -3,7 +3,7 @@ import express from 'express';
 <% } -%>
 import env from './config/env.js';
 import middlewares from './middlewares/index.js';
-import chalk from 'chalk';
+import logger from './utils/logger.js';
     
 <% if(webFramework === 'express') { -%>
 const app = express();
@@ -12,9 +12,13 @@ const serverPort = env.serverPort;
 
 middlewares.setupDatabase();
 middlewares.setupSecurityHeaders(app);
+middlewares.setupJsonParser(app);
+middlewares.setupUrlEncodedParser(app);
+middlewares.setupRequestID(app);
 middlewares.setupRouters(app);
 middlewares.setupNotFound(app);
+middlewares.setupError(app);
 
 app.listen(serverPort, () => {
-    console.log(chalk.green(`The server is running on the port - [${serverPort}]`));
+    logger.info(`The server is started at the URL - localhost:${serverPort}`);
 });

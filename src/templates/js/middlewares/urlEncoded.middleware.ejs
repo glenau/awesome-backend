@@ -1,0 +1,9 @@
+<% if(webFramework === 'express') { -%>
+import { urlencoded } from 'express';
+
+function setupUrlEncodedParser(app) {
+    app.use(urlencoded({ extended: true }));
+}
+
+export default setupUrlEncodedParser;
+<% } -%>

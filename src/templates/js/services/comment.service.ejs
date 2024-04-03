@@ -1,0 +1,18 @@
+import Comment from '../models/comment.model.js';
+
+class CommentService {
+    async createComment(data) {
+        const comment = new Comment(data);
+        return await comment.save();
+    }
+
+    async findCommentByID(id) {
+        return await Comment.findById(id);
+    }
+
+    async findAllComments() {
+        return await Comment.find();
+    }
+}
+
+export default new CommentService();

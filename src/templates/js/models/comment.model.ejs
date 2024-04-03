@@ -1,16 +1,16 @@
-<% if(database && databaseName === 'MongoDB') { -%>
+<% if(database && databaseNameOML === 'mongoose') { -%>
 import { Schema, model } from 'mongoose';
 
 const CommentSchema = new Schema(
     {
-        title: {
-            type: String,
-            required: true,
-        },
         body: {
             type: String,
-            required: true,
-        }
+            required: [true, 'Body is required'],
+        },
+        createdAt: {
+            type: Date,
+            default: Date.now,
+        },
     },
     { versionKey: false },
 );

@@ -52,24 +52,11 @@ class Questions {
             },
             {
                 type: 'list',
-                name: 'databaseName',
+                name: 'databaseNameOML',
                 message: 'Which database do you prefer to use?',
-                choices: ['MongoDB'],
+                choices: [{ name: 'MongoDB', value: 'mongoose' }],
                 when: function (answers) {
                     return answers.database;
-                },
-            },
-            {
-                type: 'list',
-                name: 'databaseOML',
-                message: 'Which database object modeling tool do you prefer?',
-                choices: function (answers) {
-                    if (answers.databaseName === 'MongoDB') {
-                        return [{ name: 'Mongoose', value: 'mongoose' }];
-                    }
-                },
-                when: function (answers) {
-                    return answers.databaseName;
                 },
             },
             {

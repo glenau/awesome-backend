@@ -1,22 +1,25 @@
+import ProfileService from '../services/profile.service.js';
+import Response from '../utils/response.js';
+
 class ProfileController {
     async createProfile(req, res, next) {;
-        res.status(200).json({ status: true });
+        Response.success(req, res, 'success');
     }
 
     async getProfiles(req, res, next) {;
-        res.status(200).json({ status: true });
+        Response.success(req, res, 'success');
     }
 
     async getProfileByID(req, res, next) {;
-        res.status(200).json({ status: true });
+        Response.success(req, res, 'success');
     }
 
     async updateProfile(req, res, next) {;
-        res.status(200).json({ status: true });
+        Response.success(req, res, 'success');
     }
 
     async deleteProfile(req, res, next) {;
-        res.status(200).json({ status: true });
+        Response.success(req, res, 'success');
     }
 }
 

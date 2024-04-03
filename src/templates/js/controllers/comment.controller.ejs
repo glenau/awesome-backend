@@ -1,22 +1,25 @@
+import CommentService from '../services/comment.service.js';
+import Response from '../utils/response.js';
+
 class CommentController {
     async createComment(req, res, next) {;
-        res.status(200).json({ status: true });
+        Response.success(req, res, 'success');
     }
 
     async getComments(req, res, next) {;
-        res.status(200).json({ status: true });
+        Response.success(req, res, 'success');
     }
 
     async getCommentByID(req, res, next) {;
-        res.status(200).json({ status: true });
+        Response.success(req, res, 'success');
     }
 
     async updateComment(req, res, next) {;
-        res.status(200).json({ status: true });
+        Response.success(req, res, 'success');
     }
 
     async deleteComment(req, res, next) {;
-        res.status(200).json({ status: true });
+        Response.success(req, res, 'success');
     }
 }
 

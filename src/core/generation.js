@@ -37,25 +37,27 @@ class Generation {
     }
 
     setProjectDependencies() {
-        const dependencies = ['dotenv', 'helmet', 'chalk'];
+        const dependencies = ['dotenv', 'helmet', 'pino', 'pino-pretty', 'uuid', 'joi'];
         dependencies.push(this.answers.webFramework);
         if (this.answers.database) {
-            dependencies.push(this.answers.databaseOML);
+            dependencies.push(this.answers.databaseNameOML);
         }
         return dependencies;
     }
 
     async start() {
-        console.log(chalk.blue.bold('\nStarting the project generation process:'));
+        console.log(chalk.cyan.bold('\nStarting the project generation process:'));
         try {
             await this.createFolders();
             await this.createPackageFile();
             await this.createProjectFilesFromTemplates();
             if (this.answers.dependencies) {
                 await this.installDependencies();
+                return 'start';
             } else {
-                console.log(chalk.blue.bold("\nDon't forget to install the required dependencies:"));
-                console.log(chalk.yellow(`npm install ${this.dependencies.join(' ')}\n`));
+                console.log(chalk.cyan.bold("\nDon't forget to run npm command to install all dependencies:"));
+                console.log(chalk.green.bold(`npm install ${this.dependencies.join(' ')}\n`));
+                return 'install';
             }
         } catch (error) {
             console.log(chalk.red.bold(error));
@@ -63,7 +65,7 @@ class Generation {
     }
 
     async createFolders() {
-        process.stdout.write('[Step 1: Creation of the project architecture] - ');
+        process.stdout.write(chalk.white.bold('[Step 1: Creation of the project architecture] - '));
         for (const folder of this.projectFolders) {
             const folderPath = path.join(this.projectPath, folder);
             try {
@@ -76,7 +78,7 @@ class Generation {
     }
 
     async createPackageFile() {
-        process.stdout.write('[Step 2: Create package.json] - ');
+        process.stdout.write(chalk.white.bold('[Step 2: Create package.json] - '));
         const packagePath = path.join(this.projectPath, 'package.json');
         const packageData = {
             name: this.answers.projectName,
@@ -94,7 +96,7 @@ class Generation {
     }
 
     async createProjectFilesFromTemplates() {
-        process.stdout.write('[Step 3: Generating Project Files] - ');
+        process.stdout.write(chalk.white.bold('[Step 3: Generating Project Files] - '));
         const projectFiles = await this.getProjectFiles(this.projectTemplatePath);
         for (const fileName of projectFiles) {
             await this.generateAndWriteFile(fileName);
@@ -131,7 +133,7 @@ class Generation {
     }
 
     async installDependencies() {
-        process.stdout.write('[Step 4: Installing Dependencies] - ');
+        process.stdout.write(chalk.white.bold('[Step 4: Installing Dependencies] - '));
         const command = `npm install ${this.dependencies.join(' ')}`;
 
         return new Promise((resolve, reject) => {

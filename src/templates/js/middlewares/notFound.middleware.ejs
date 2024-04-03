@@ -1,6 +1,8 @@
+import Response from '../utils/response.js';
+
 function setupNotFound(app) {
     app.use((req, res, next) => {
-        res.status(404).json({ status: false, message: 'The requested page was not found' });
+        Response.failure(req, res, 'Page not found', 404);
     });
 }
 

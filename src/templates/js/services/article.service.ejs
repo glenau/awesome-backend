@@ -1,0 +1,18 @@
+import Article from '../models/article.model.js';
+
+class ArticleService {
+    async createArticle(data) {
+        const article = new Article(data);
+        return await article.save();
+    }
+
+    async findAllArticles() {
+        return await Article.find();
+    }
+
+    async findArticleByID(id) {
+        return await Article.findById(id);
+    }
+}
+
+export default new ArticleService();

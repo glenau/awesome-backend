@@ -38,6 +38,11 @@ npm start
 -   [ ] [TypeScript](https://www.npmjs.com/package/typescript)
 -   [ ] [WebSockets](https://www.npmjs.com/package/ws)
 
+### Other:
+
+-   [x] [Pino](https://www.npmjs.com/package/pino)
+-   [x] [Pino-pretty](https://www.npmjs.com/package/pino-pretty)
+
 ## License
 
 [MIT](LICENSE)

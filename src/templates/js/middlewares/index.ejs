@@ -1,13 +1,21 @@
 import setupDatabase from './database.middleware.js';
 import setupSecurityHeaders from './security.middleware.js';
+import setupJsonParser from './json.middleware.js';
+import setupUrlEncodedParser from './urlEncoded.middleware.js';
+import setupRequestID from './requestID.middleware.js';
 import setupRouters from './routers.middleware.js';
 import setupNotFound from './notFound.middleware.js';
+import setupError from './error.middleware.js';
 
 const middlewares = {
     setupDatabase,
     setupSecurityHeaders,
+    setupJsonParser,
+    setupUrlEncodedParser,
+    setupRequestID,
     setupRouters,
     setupNotFound,
+    setupError,
 };
 
 export default middlewares;

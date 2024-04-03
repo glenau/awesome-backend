@@ -1,0 +1,9 @@
+import Response from '../utils/response.js';
+
+function setupError(app) {
+    app.use((err, req, res, next) => {
+        Response.failure(req, res, err.message, 200, err);
+    });
+}
+
+export default setupError;

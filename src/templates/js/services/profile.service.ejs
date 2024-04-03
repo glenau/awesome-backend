@@ -1,0 +1,18 @@
+import Profile from '../models/profile.model.js';
+
+class ProfileService {
+    async createProfile(data) {
+        const profile = new Profile(data);
+        return await profile.save();
+    }
+
+    async findProfileByID(id) {
+        return await Profile.findById(id);
+    }
+
+    async findAllProfiles() {
+        return await Profile.find();
+    }
+}
+
+export default new ProfileService();

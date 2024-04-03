@@ -1,22 +1,47 @@
+import ArticleService from '../services/article.service.js';
+import Response from '../utils/response.js';
+
 class ArticleController {
     async createArticle(req, res, next) {;
-        res.status(200).json({ status: true });
+        try {
+            await ArticleService.createArticle(req.body);
+            Response.success(req, res, 'Article created');
+        } catch (error) {
+            next(error);
+        }
     }
 
     async getArticles(req, res, next) {;
-        res.status(200).json({ status: true });
+        try {
+            const articles = await ArticleService.findAllArticles();
+            Response.success(req, res, articles);
+        } catch (error) {
+            next(error);
+        }
     }
 
     async getArticleByID(req, res, next) {;
-        res.status(200).json({ status: true });
+        try {
+            Response.success(req, res, 'success');
+        } catch (error) {
+            next(error);
+        }
     }
 
     async updateArticle(req, res, next) {;
-        res.status(200).json({ status: true });
+        try {
+            Response.success(req, res, 'success');
+        } catch (error) {
+            next(error);
+        }
     }
 
     async deleteArticle(req, res, next) {;
-        res.status(200).json({ status: true });
+        try {
+            Response.success(req, res, 'success');
+        } catch (error) {
+            next(error);
+        }
     }
 }
 

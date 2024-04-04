@@ -1,10 +1,10 @@
-<% if(database && databaseNameOML === 'mongoose')  { -%>
+<% if(database && databaseName === 'MongoDB')  { -%>
 import mongoose from 'mongoose';
 <% } -%>
 import env from '../config/env.js';
 import models from '../models/index.js';
 
-<% if(database && databaseNameOML === 'mongoose')  { -%>
+<% if(database && databaseName === 'MongoDB')  { -%>
 const db = {
     mongoose,
     url: env.mongoUrl,

@@ -1,6 +1,7 @@
 /*
     Author: Gleb Naumov (©) 2024
     License: MIT
+    Project: https://github.com/glenau/awesome-backend
 */
 
 import inquirer from 'inquirer';
@@ -52,9 +53,9 @@ class Questions {
             },
             {
                 type: 'list',
-                name: 'databaseNameOML',
+                name: 'databaseName',
                 message: 'Which database do you prefer to use?',
-                choices: [{ name: 'MongoDB', value: 'mongoose' }],
+                choices: ['MongoDB'],
                 when: function (answers) {
                     return answers.database;
                 },
@@ -69,15 +70,6 @@ class Questions {
                         { name: 'In the current folder', value: 'current' },
                     ];
                 },
-            },
-            {
-                type: 'list',
-                name: 'dependencies',
-                message: 'Do you want to install dependencies now?',
-                choices: [
-                    { name: 'Yes', value: true },
-                    { name: 'No', value: false },
-                ],
             },
         ];
     }

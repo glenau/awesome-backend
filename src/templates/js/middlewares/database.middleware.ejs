@@ -1,7 +1,7 @@
 import db from '../services/index.js';
 import logger from '../utils/logger.js';
 
-<% if(database && databaseNameOML === 'mongoose') { -%>
+<% if(database && databaseName === 'MongoDB') { -%>
 let reconnectAttempts = 0;
 
 async function setupDatabase() {

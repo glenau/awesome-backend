@@ -6,12 +6,20 @@ class ArticleService {
         return await article.save();
     }
 
-    async findAllArticles() {
+    async findArticles() {
         return await Article.find();
     }
 
     async findArticleByID(id) {
         return await Article.findById(id);
+    }
+
+    async updateArticleByID(id, data) {
+        return await Article.findByIdAndUpdate(id, data, { new: true });
+    }
+
+    async deleteArticleByID(id) {
+        return await Article.findByIdAndDelete(id);
     }
 }
 

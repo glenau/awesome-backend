@@ -7,10 +7,6 @@ const ProfileSchema = new Schema(
             type: String,
             required: [true, 'Name is required'],
         },
-        surname: {
-            type: String,
-            required: [true, 'Surname is required'],
-        },
         createdAt: {
             type: Date,
             default: Date.now,
@@ -22,4 +18,15 @@ const ProfileSchema = new Schema(
 const Profile = model('profiles', ProfileSchema);
 
 export default Profile;
+<% } -%>
+<% if(!database) { -%>
+class Profile {
+    constructor(id, name, createdAt) {
+        this.id = id;
+        this.name = name;
+        this.createdAt = createdAt;
+    }
+}
+
+export default Profile;     
 <% } -%>

@@ -6,12 +6,20 @@ class ProfileService {
         return await profile.save();
     }
 
+    async findProfiles() {
+        return await Profile.find();
+    }
+
     async findProfileByID(id) {
         return await Profile.findById(id);
     }
 
-    async findAllProfiles() {
-        return await Profile.find();
+    async updateProfileByID(id, data) {
+        return await Profile.findByIdAndUpdate(id, data, { new: true });
+    }
+
+    async deleteProfileByID(id) {
+        return await Profile.findByIdAndDelete(id);
     }
 }
 

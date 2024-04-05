@@ -1,4 +1,6 @@
+<% if(database) { -%>
 import setupDatabase from './database.middleware.js';
+<% } -%>
 import setupSecurityHeaders from './security.middleware.js';
 import setupJsonParser from './json.middleware.js';
 import setupUrlEncodedParser from './urlEncoded.middleware.js';
@@ -8,7 +10,9 @@ import setupNotFound from './notFound.middleware.js';
 import setupError from './error.middleware.js';
 
 const middlewares = {
+<% if(database) { -%>
     setupDatabase,
+<% } -%>
     setupSecurityHeaders,
     setupJsonParser,
     setupUrlEncodedParser,

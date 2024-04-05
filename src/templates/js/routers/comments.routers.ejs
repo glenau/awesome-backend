@@ -1,14 +1,15 @@
 <% if(webFramework === 'express') { -%>
 import { Router } from 'express';
 import CommentController from '../controllers/comment.controller.js';
+import { idValidator } from '../validators/validator.js';
 
 const router = Router();
 
 router.post('/', CommentController.createComment);
 router.get('/', CommentController.getComments);
-router.get('/:id', CommentController.getCommentByID);
-router.put('/:id', CommentController.updateComment);
-router.delete('/:id', CommentController.deleteComment);
+router.get('/:id', idValidator, CommentController.getCommentByID);
+router.put('/:id', idValidator, CommentController.updateComment);
+router.delete('/:id', idValidator, CommentController.deleteComment);
 
 export default router;
 <% } -%>

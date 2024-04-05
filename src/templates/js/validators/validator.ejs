@@ -1,0 +1,33 @@
+import Response from '../utils/response.js';
+<% if(database && databaseName === 'MongoDB') { -%>
+import { Types } from 'mongoose';
+<% } -%>
+
+function bodyValidator(req, res, next) {
+    if ((req.method === 'POST' || req.method === 'PUT') && Object.keys(req.body).length === 0) {
+        Response.failure(req, res, 'Request body is missing', 400);
+        return;
+    }
+
+    next();
+}
+
+function idValidator(req, res, next) {
+    if(req.method !== 'POST') {
+        const id = req.params.id;
+        if (!id) {
+            Response.failure(req, res, 'Parameter ID is missing', 400);
+            return;
+        }
+<% if(database && databaseName === 'MongoDB') { -%>
+        if (!Types.ObjectId.isValid(id)) {
+            Response.failure(req, res, 'Invalid ID format', 400);
+            return;
+        }
+<% } -%>
+    }
+    
+    next();
+}
+
+export { bodyValidator, idValidator };

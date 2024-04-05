@@ -6,12 +6,20 @@ class CommentService {
         return await comment.save();
     }
 
+    async findComments() {
+        return await Comment.find();
+    }
+
     async findCommentByID(id) {
         return await Comment.findById(id);
     }
 
-    async findAllComments() {
-        return await Comment.find();
+    async updateCommentByID(id, data) {
+        return await Comment.findByIdAndUpdate(id, data, { new: true });
+    }
+
+    async deleteCommentByID(id) {
+        return await Comment.findByIdAndDelete(id);
     }
 }
 

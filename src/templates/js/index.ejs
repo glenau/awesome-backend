@@ -10,7 +10,9 @@ const app = express();
 <% } -%>
 const serverPort = env.serverPort;
 
+<% if(database) { -%>
 middlewares.setupDatabase();
+<% } -%>
 middlewares.setupSecurityHeaders(app);
 middlewares.setupJsonParser(app);
 middlewares.setupUrlEncodedParser(app);

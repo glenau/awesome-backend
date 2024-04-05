@@ -16,9 +16,11 @@ class Generation {
     constructor(answers) {
         this.answers = answers;
         this.projectPath = this.setProjectPath();
+        this.projectLanguage = this.setProjectLanguage();
         this.projectTemplatePath = this.setProjectTemplatePath();
         this.projectFolders = this.setProjectFolders();
         this.dependencies = this.setProjectDependencies();
+        this.ignoredFiles = this.setIgnoredFiles();
     }
 
     // Setting the path for a future project
@@ -30,15 +32,27 @@ class Generation {
         return projectPath;
     }
 
+    setProjectLanguage() {
+        return 'js';
+    }
+
     // Setting the path for code templates
     setProjectTemplatePath() {
         const currentDir = path.dirname(fileURLToPath(import.meta.url));
-        return path.join(currentDir, '..', 'templates/js');
+        return path.join(currentDir, '..', 'templates/' + this.projectLanguage);
     }
 
     // Setting the project folder list
     setProjectFolders() {
-        return ['config', 'controllers', 'middlewares', 'routers', 'services', 'utils', 'models'];
+        return ['config', 'controllers', 'middlewares', 'models', 'routers', 'services', 'utils', 'validators'];
+    }
+
+    setIgnoredFiles() {
+        const files = {};
+        if (!this.answers.database) {
+            files['middlewares/database.middleware.ejs'] = true;
+        }
+        return files;
     }
 
     // Setting a list of required dependencies for a project
@@ -61,8 +75,8 @@ class Generation {
             await this.createPackageFile();
             await this.createProjectFilesFromTemplates();
             await this.installDependencies();
-        } catch (error) {
-            console.log(chalk.red.bold(error));
+        } catch (err) {
+            console.log(chalk.red.bold(err));
         }
     }
 
@@ -73,8 +87,8 @@ class Generation {
             const folderPath = path.join(this.projectPath, folder);
             try {
                 await fs.promises.mkdir(folderPath, { recursive: true });
-            } catch (error) {
-                console.error(chalk.red.bold(`Error creating folder ${folderPath}: ${error}`));
+            } catch (err) {
+                console.err(chalk.red.bold(`err creating folder ${folderPath}: ${err}`));
             }
         }
         process.stdout.write(chalk.green.bold('OK\n'));
@@ -104,21 +118,23 @@ class Generation {
         process.stdout.write(chalk.white.bold('[Step 3: Generating Project Files] - '));
         const projectFiles = await this.getProjectFiles(this.projectTemplatePath);
         for (const fileName of projectFiles) {
-            await this.generateAndWriteFile(fileName);
+            if (!this.ignoredFiles[fileName]) {
+                await this.generateAndWriteFile(fileName);
+            }
         }
         await this.generateAndWriteFile('.env.example', '.env');
         process.stdout.write(chalk.green.bold('OK\n'));
     }
 
     // Transformation of templates from .ejs to .js format using user parameters
-    async generateAndWriteFile(sourceFileName, targetFileName = sourceFileName.replace(/\.ejs$/, '.js')) {
+    async generateAndWriteFile(sourceFileName, targetFileName = sourceFileName.replace(/\.ejs$/, '.' + this.projectLanguage)) {
         const fileTemplatePath = path.join(this.projectTemplatePath, sourceFileName);
         const fileProjectPath = path.join(this.projectPath, targetFileName);
         try {
             const str = await ejs.renderFile(fileTemplatePath, this.answers);
             fs.writeFileSync(fileProjectPath, str);
-        } catch (error) {
-            console.error(chalk.red.bold(`Error generating file ${sourceFileName}: ${error}`));
+        } catch (err) {
+            console.err(chalk.red.bold(`err generating file ${sourceFileName}: ${err}`));
         }
     }
 
@@ -145,13 +161,13 @@ class Generation {
         const command = `npm install ${this.dependencies.join(' ')}`;
 
         await new Promise((resolve, reject) => {
-            exec(command, { cwd: this.projectPath }, (error, stdout, stderr) => {
-                if (error) {
-                    console.error(chalk.red.bold(`Error installing dependencies: ${error.message}`));
-                    reject(error);
+            exec(command, { cwd: this.projectPath }, (err, stdout, stderr) => {
+                if (err) {
+                    console.err(chalk.red.bold(`err installing dependencies: ${err.message}`));
+                    reject(err);
                 } else if (stderr) {
-                    console.error(chalk.red.bold(`Error installing dependencies: ${stderr}`));
-                    reject(new Error(stderr));
+                    console.err(chalk.red.bold(`err installing dependencies: ${stderr}`));
+                    reject(new err(stderr));
                 } else {
                     process.stdout.write(chalk.green.bold('OK\n\n'));
                     resolve();

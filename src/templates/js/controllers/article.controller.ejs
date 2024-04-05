@@ -4,43 +4,46 @@ import Response from '../utils/response.js';
 class ArticleController {
     async createArticle(req, res, next) {;
         try {
-            await ArticleService.createArticle(req.body);
-            Response.success(req, res, 'Article created');
-        } catch (error) {
-            next(error);
+            const article = await ArticleService.createArticle(req.body);
+            Response.success(req, res, article);
+        } catch (err) {
+            next(err);
         }
     }
 
     async getArticles(req, res, next) {;
         try {
-            const articles = await ArticleService.findAllArticles();
+            const articles = await ArticleService.findArticles();
             Response.success(req, res, articles);
-        } catch (error) {
-            next(error);
+        } catch (err) {
+            next(err);
         }
     }
 
     async getArticleByID(req, res, next) {;
         try {
-            Response.success(req, res, 'success');
-        } catch (error) {
-            next(error);
+            const article = await ArticleService.findArticleByID(req.params.id);
+            Response.success(req, res, article);
+        } catch (err) {
+            next(err);
         }
     }
 
     async updateArticle(req, res, next) {;
         try {
-            Response.success(req, res, 'success');
-        } catch (error) {
-            next(error);
+            const article = await ArticleService.updateArticleByID(req.params.id, req.body);
+            Response.success(req, res, article);
+        } catch (err) {
+            next(err);
         }
     }
 
     async deleteArticle(req, res, next) {;
         try {
-            Response.success(req, res, 'success');
-        } catch (error) {
-            next(error);
+            const result = await ArticleService.deleteArticleByID(req.params.id);
+            Response.success(req, res, result);
+        } catch (err) {
+            next(err);
         }
     }
 }

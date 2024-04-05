@@ -28,8 +28,10 @@ Before installing, [download and install Node.js](https://nodejs.org/en/download
 -   [ ] Tools
     -   [ ] [TypeScript](https://www.npmjs.com/package/typescript)
     -   [ ] [WebSockets](https://www.npmjs.com/package/ws)
+    -   [ ] [Redis](https://www.npmjs.com/package/redis)
 -   [x] Logging
     -   [x] [Pino + Pino-pretty](https://www.npmjs.com/package/pino)
+-   [ ] Documentation
 
 See the [open issues](https://github.com/glenau/awesome-backend/issues) for a full list of proposed features (and known issues).
 
@@ -40,4 +42,7 @@ Distributed under the [MIT](LICENSE) License.
 ## Contact
 
 Gleb Naumov - glenaudev@gmail.com
+
 NPM package: https://www.npmjs.com/package/awesome-backend
+
+Source: https://github.com/glenau/awesome-backend

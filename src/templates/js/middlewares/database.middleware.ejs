@@ -8,14 +8,14 @@ async function setupDatabase() {
     try {
         await db.mongoose.connect(db.url, {});
         logger.info(`Database connected - ${db.url}`);
-    } catch (error) {
+    } catch (err) {
         logger.error('Failed to connect to the database');
         process.exit(1);
     }
 
     const dbConnection = db.mongoose.connection;
 
-    dbConnection.on('error', (err) => {
+    dbConnection.on('err', (err) => {
         logger.error('Error connecting to the database');
     });
 
@@ -28,7 +28,7 @@ async function setupDatabase() {
                     await db.mongoose.connect(db.url, {});
                     logger.info(`Database connected - ${db.url}`);
                     reconnectAttempts = 0;
-                } catch (error) {
+                } catch (err) {
                     logger.error('Error reconnecting to the database');
                 }
             }, 10000);

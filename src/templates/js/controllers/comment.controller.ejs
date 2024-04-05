@@ -3,23 +3,48 @@ import Response from '../utils/response.js';
 
 class CommentController {
     async createComment(req, res, next) {;
-        Response.success(req, res, 'success');
+        try {
+            const comment = await CommentService.createComment(req.body);
+            Response.success(req, res, comment);
+        } catch (err) {
+            next(err);
+        }
     }
 
     async getComments(req, res, next) {;
-        Response.success(req, res, 'success');
+        try {
+            const comments = await CommentService.findComments();
+            Response.success(req, res, comments);
+        } catch (err) {
+            next(err);
+        }
     }
 
     async getCommentByID(req, res, next) {;
-        Response.success(req, res, 'success');
+        try {
+            const comment = await CommentService.findCommentByID(req.params.id);
+            Response.success(req, res, comment);
+        } catch (err) {
+            next(err);
+        }
     }
 
     async updateComment(req, res, next) {;
-        Response.success(req, res, 'success');
+        try {
+            const comment = await CommentService.updateCommentByID(req.params.id, req.body);
+            Response.success(req, res, comment);
+        } catch (err) {
+            next(err);
+        }
     }
 
     async deleteComment(req, res, next) {;
-        Response.success(req, res, 'success');
+        try {
+            const result = await CommentService.deleteCommentByID(req.params.id);
+            Response.success(req, res, result);
+        } catch (err) {
+            next(err);
+        }
     }
 }
 

@@ -1,7 +1,8 @@
 import routers from '../routers/index.js';
+import { bodyValidator } from '../validators/validator.js';
 
 function setupRouters(app) {
-    app.use('/api', routers);
+    app.use('/api', bodyValidator, routers);
 }
 
 export default setupRouters;

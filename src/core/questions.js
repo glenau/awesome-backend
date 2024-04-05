@@ -78,8 +78,8 @@ class Questions {
         try {
             const answers = await inquirer.prompt(this.questions);
             return answers;
-        } catch (error) {
-            console.log(chalk.red.bold(error));
+        } catch (err) {
+            console.log(chalk.red.bold(err));
         }
     }
 }

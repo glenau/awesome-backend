@@ -23,3 +23,15 @@ const Article = model('articles', ArticleSchema);
 
 export default Article;
 <% } -%>
+<% if(!database) { -%>
+class Article {
+    constructor(id, title, body, createdAt) {
+        this.id = id;
+        this.title = title;
+        this.body = body;
+        this.createdAt = createdAt;
+    }
+}
+
+export default Article;    
+<% } -%>

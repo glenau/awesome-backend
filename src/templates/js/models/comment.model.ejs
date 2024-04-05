@@ -19,3 +19,14 @@ const Comment = model('comments', CommentSchema);
 
 export default Comment;
 <% } -%>
+<% if(!database) { -%>
+class Comment {
+    constructor(id, body, createdAt) {
+        this.id = id;
+        this.body = body;
+        this.createdAt = createdAt;
+    }
+}
+
+export default Comment;     
+<% } -%>

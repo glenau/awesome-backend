@@ -3,6 +3,7 @@
 /*
     Author: Gleb Naumov (©) 2024
     License: MIT
+    Project: https://github.com/glenau/awesome-backend
 */
 
 import Questions from '../src/core/questions.js';
@@ -31,8 +32,8 @@ async function run() {
             const packageJson = JSON.parse(data);
             const version = packageJson.version;
             console.log(chalk.cyan.bold('Version awesome-backend:'), chalk.green.bold(version));
-        } catch (error) {
-            console.log(chalk.red.bold(error));
+        } catch (err) {
+            console.log(chalk.red.bold(err));
         }
         console.log(
             chalk.cyan.bold('Welcome, traveler! Please answer the following questions, and I will help you generate the server-side part:')
@@ -46,8 +47,8 @@ async function run() {
         // Checking MongoDB
         if (answers.database && answers.databaseName === 'MongoDB') {
             await new Promise((resolve, reject) => {
-                exec('mongod --version', (error, stdout, stderr) => {
-                    if (error) {
+                exec('mongod --version', (err, stdout, stderr) => {
+                    if (err) {
                         console.log(chalk.yellow.bold(`[WARNING] - Looks like you don't have MongoDB installed`));
                         warning = true;
                         reject();
@@ -61,8 +62,8 @@ async function run() {
         // Checking PostgreSQL
         if (answers.database && answers.databaseName === 'PostgreSQL') {
             await new Promise((resolve, reject) => {
-                exec('psql --version', (error, stdout, stderr) => {
-                    if (error) {
+                exec('psql --version', (err, stdout, stderr) => {
+                    if (err) {
                         console.log(chalk.yellow.bold(`[WARNING] - Looks like you don't have PostgreSQL installed`));
                         warning = true;
                         reject();
@@ -88,8 +89,8 @@ async function run() {
             )
         );
         console.log(chalk.magenta.bold('At this point I say goodbye and wish you good luck!'));
-    } catch (error) {
-        console.log(chalk.red.bold(error));
+    } catch (err) {
+        console.log(chalk.red.bold(err));
     }
 }
 

@@ -1,0 +1,23 @@
+/*
+    Middleware for validating specific parameters for articles
+*/
+
+import Response from '../utils/response.js';
+
+function createArticleValidator(req, res, next) {
+    const title = req.body.title;
+    if (!title) {
+        Response.failure(req, res, 'Parameter title is missing', 400);
+        return;
+    }
+
+    const body = req.body.body;
+    if (!body) {
+        Response.failure(req, res, 'Parameter body is missing', 400);
+        return;
+    }
+
+    next();
+}
+
+export { createArticleValidator }

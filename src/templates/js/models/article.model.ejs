@@ -1,4 +1,8 @@
-<% if(database && databaseName === 'MongoDB') { -%>
+/*
+    Data model for working with the articles object
+*/
+
+<% if(database && databaseType === 'MongoDB') { -%>
 import { Schema, model } from 'mongoose';
 
 const ArticleSchema = new Schema(
@@ -11,25 +15,41 @@ const ArticleSchema = new Schema(
             type: String,
             required: [true, 'Body is required'],
         },
-        createdAt: {
-            type: Date,
-            default: Date.now,
-        },
     },
-    { versionKey: false },
+    { versionKey: false, timestamps: true }
 );
 
 const Article = model('articles', ArticleSchema);
 
 export default Article;
 <% } -%>
+<% if(database && databaseType === 'PostgreSQL') { -%>
+import { DataTypes } from 'sequelize';
+import db from '../services/index.js';
+
+const Article = db.sequelize.define('articles', {
+    title: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    body: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+    },
+});
+
+export default Article;
+<% } -%>
 <% if(!database) { -%>
+import { v4 as uuidv4 } from 'uuid';
+
 class Article {
-    constructor(id, title, body, createdAt) {
-        this.id = id;
+    constructor(title, body) {
+        this.id = uuidv4();
         this.title = title;
         this.body = body;
-        this.createdAt = createdAt;
+        this.createdAt = new Date().toISOString();
+        this.updatedAt = new Date().toISOString();
     }
 }
 

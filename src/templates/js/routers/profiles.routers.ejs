@@ -1,11 +1,19 @@
+/*
+    Router for profiles with handlers in the controller
+    profile.controller.js
+*/
+
 <% if(webFramework === 'express') { -%>
 import { Router } from 'express';
 import ProfileController from '../controllers/profile.controller.js';
 import { idValidator } from '../validators/validator.js';
+<% if(!database) { -%>
+import { createProfileValidator } from '../validators/profile.validator.js';
+<% } -%>
 
 const router = Router();
 
-router.post('/', ProfileController.createProfile);
+router.post('/',<% if(!database) { -%> createProfileValidator,<% } -%>  ProfileController.createProfile);
 router.get('/', ProfileController.getProfiles);
 router.get('/:id', idValidator, ProfileController.getProfileByID);
 router.put('/:id', idValidator, ProfileController.updateProfile);

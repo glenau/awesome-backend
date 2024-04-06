@@ -20,7 +20,7 @@ async function run() {
     let warning = false;
 
     // Node.js minimum version warning
-    if (majorVersion < 20) {
+    if (majorVersion < 18) {
         console.log(chalk.yellow.bold('The minimum required Node.js version is 20 or higher. Please update your version and try again'));
         console.log(chalk.yellow.bold('Current version: ') + chalk.red.bold(nodeVersion));
         console.log(chalk.yellow.bold('Download new version: ' + chalk.green.bold('https://nodejs.org/en/download')));
@@ -35,9 +35,7 @@ async function run() {
         } catch (err) {
             console.log(chalk.red.bold(err));
         }
-        console.log(
-            chalk.cyan.bold('Welcome, traveler! Please answer the following questions, and I will help you generate the server-side part:')
-        );
+        console.log(chalk.cyan.bold('Welcome! Please answer these questions to generate the server-side part:'));
     }
 
     try {
@@ -45,31 +43,27 @@ async function run() {
         const answers = await Questions.start();
 
         // Checking MongoDB
-        if (answers.database && answers.databaseName === 'MongoDB') {
+        if (answers.database && answers.databaseType === 'MongoDB') {
             await new Promise((resolve, reject) => {
                 exec('mongod --version', (err, stdout, stderr) => {
                     if (err) {
-                        console.log(chalk.yellow.bold(`[WARNING] - Looks like you don't have MongoDB installed`));
+                        console.log(chalk.yellow.bold(`\n[WARNING] - Looks like you don't have MongoDB installed`));
                         warning = true;
-                        reject();
-                    } else {
-                        resolve();
                     }
+                    resolve();
                 });
             });
         }
 
         // Checking PostgreSQL
-        if (answers.database && answers.databaseName === 'PostgreSQL') {
+        if (answers.database && answers.databaseType === 'PostgreSQL') {
             await new Promise((resolve, reject) => {
                 exec('psql --version', (err, stdout, stderr) => {
                     if (err) {
-                        console.log(chalk.yellow.bold(`[WARNING] - Looks like you don't have PostgreSQL installed`));
+                        console.log(chalk.yellow.bold(`\n[WARNING] - Looks like you don't have PostgreSQL installed`));
                         warning = true;
-                        reject();
-                    } else {
-                        resolve();
                     }
+                    resolve();
                 });
             });
         }
@@ -78,16 +72,15 @@ async function run() {
         await new Generation(answers).start();
 
         if (!warning) {
-            console.log(
-                chalk.cyan.bold('Great! Now open your project and run it using the npm command: ' + chalk.green.bold('npm start\n'))
-            );
+            console.log(chalk.cyan.bold('Great! Open your project and start it with the command: '));
+            console.log(chalk.white.bold('- ') + chalk.green.bold('npm start\n'));
+        } else {
+            console.log(chalk.yellow.bold('Before running the project, please address all warnings!\n'));
         }
 
-        console.log(
-            chalk.cyan.bold(
-                'Please read the documentation for your project which is located in the file: ' + chalk.green.bold('README.md\n')
-            )
-        );
+        console.log(chalk.cyan.bold('Documentation for your project can be found in the files:'));
+        console.log(chalk.white.bold('- ') + chalk.green.bold('README.md'));
+        console.log(chalk.white.bold('- ') + chalk.green.bold('docs.md\n'));
         console.log(chalk.magenta.bold('At this point I say goodbye and wish you good luck!'));
     } catch (err) {
         console.log(chalk.red.bold(err));

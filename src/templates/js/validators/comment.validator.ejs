@@ -1,0 +1,17 @@
+/*
+    Middleware for validating specific parameters for comments
+*/
+
+import Response from '../utils/response.js';
+
+function createCommentValidator(req, res, next) {
+    const body = req.body.body;
+    if (!body) {
+        Response.failure(req, res, 'Parameter body is missing', 400);
+        return;
+    }
+
+    next();
+}
+
+export { createCommentValidator }

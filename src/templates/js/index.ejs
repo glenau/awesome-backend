@@ -1,3 +1,7 @@
+/*
+    Launching the application and connecting the middlewares
+*/
+
 <% if(webFramework === 'express') { -%>
 import express from 'express';
 <% } -%>
@@ -10,6 +14,7 @@ const app = express();
 <% } -%>
 const serverPort = env.serverPort;
 
+// Setup middlewares
 <% if(database) { -%>
 middlewares.setupDatabase();
 <% } -%>
@@ -21,6 +26,7 @@ middlewares.setupRouters(app);
 middlewares.setupNotFound(app);
 middlewares.setupError(app);
 
+// Start the server and listen on the specified port
 app.listen(serverPort, () => {
     logger.info(`The server is started at the URL - localhost:${serverPort}`);
 });

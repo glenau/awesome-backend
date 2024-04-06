@@ -13,7 +13,7 @@ class Questions {
             {
                 type: 'input',
                 name: 'projectName',
-                message: 'What is the name of your project?',
+                message: 'What is your project named?',
                 default: 'awesome-backend',
                 validate: function (value) {
                     if (/^(?:(?:@(?:[a-z0-9-*~][a-z0-9-*._~]*)?\/[a-z0-9-._~])|[a-z0-9-~])[a-z0-9-._~]*$/.test(value)) {
@@ -26,7 +26,7 @@ class Questions {
             {
                 type: 'list',
                 name: 'webFramework',
-                message: 'Which web server framework are you interested in?',
+                message: 'Which web server framework do you prefer?',
                 choices: [{ name: 'Express', value: 'express' }],
             },
             {
@@ -45,7 +45,7 @@ class Questions {
             {
                 type: 'list',
                 name: 'database',
-                message: 'Do you want to add a database?',
+                message: 'Do you want to include a database?',
                 choices: [
                     { name: 'Yes', value: true },
                     { name: 'No', value: false },
@@ -53,11 +53,26 @@ class Questions {
             },
             {
                 type: 'list',
-                name: 'databaseName',
-                message: 'Which database do you prefer to use?',
-                choices: ['MongoDB'],
+                name: 'databaseType',
+                message: 'Which database do you prefer?',
+                choices: ['MongoDB', 'PostgreSQL'],
                 when: function (answers) {
                     return answers.database;
+                },
+            },
+            {
+                type: 'input',
+                name: 'databaseName',
+                message: 'What to name the database?',
+                when: function (answers) {
+                    return answers.database;
+                },
+                validate: function (value) {
+                    if (/^[a-z]+$/.test(value)) {
+                        return true;
+                    } else {
+                        return 'Please enter a valid database name, containing only lowercase letters';
+                    }
                 },
             },
             {
@@ -66,7 +81,7 @@ class Questions {
                 message: 'Where to create a project?',
                 choices: function (answers) {
                     return [
-                        { name: `In a folder with the project name '${answers.projectName}'`, value: 'new' },
+                        { name: `In a folder named '${answers.projectName}'`, value: 'new' },
                         { name: 'In the current folder', value: 'current' },
                     ];
                 },

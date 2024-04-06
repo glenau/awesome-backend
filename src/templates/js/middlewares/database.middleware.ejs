@@ -1,43 +1,51 @@
+/*
+    Middleware for establishing a connection to the database
+*/
+
 import db from '../services/index.js';
 import logger from '../utils/logger.js';
-
-<% if(database && databaseName === 'MongoDB') { -%>
-let reconnectAttempts = 0;
+<% if(database && databaseType === 'PostgreSQL') { -%>
+import pg from 'pg';  
+<% } -%>
 
 async function setupDatabase() {
+<% if(database && databaseType === 'MongoDB') { -%>
     try {
         await db.mongoose.connect(db.url, {});
         logger.info(`Database connected - ${db.url}`);
     } catch (err) {
-        logger.error('Failed to connect to the database');
+        logger.error(err, 'Failed to connect to the MongoDB');
         process.exit(1);
     }
+<% } -%>
+<% if(database && databaseType === 'PostgreSQL') { -%>
+    try {
+        const client = new pg.Client({
+            host: 'localhost',
+            database: 'postgres',
+            port: 5432,
+        });
+        await client.connect();
+        const result = await client.query(`SELECT FROM pg_database WHERE datname = '<%= databaseName %>';`);
 
-    const dbConnection = db.mongoose.connection;
-
-    dbConnection.on('err', (err) => {
-        logger.error('Error connecting to the database');
-    });
-
-    dbConnection.on('disconnected', () => {
-        logger.error('Connection to the database lost');
-        if (reconnectAttempts < 3) {
-            reconnectAttempts++;
-            setTimeout(async () => {
-                try {
-                    await db.mongoose.connect(db.url, {});
-                    logger.info(`Database connected - ${db.url}`);
-                    reconnectAttempts = 0;
-                } catch (err) {
-                    logger.error('Error reconnecting to the database');
-                }
-            }, 10000);
-        } else {
-            logger.error(`Failed to reconnect to the database 3 times - stopping the connection process`);
+        if (result.rows.length === 0) {
+            await client.query('CREATE DATABASE <%= databaseName%>;');
+        }
+        await client.end();
+    } catch (err) {
+        logger.error(err, 'Error creating or checking PostgreSQL');
+        process.exit(1);
+    } finally {
+        try {
+            await db.sequelize.authenticate();
+            await db.sequelize.sync();
+            logger.info(`Database connected - ${db.url}`);
+        } catch (err) {
+            logger.error(err, 'Failed to connect to the PostgreSQL');
             process.exit(1);
         }
-    });
+    } 
+<% } -%>
 }
 
 export default setupDatabase;
-<% } -%>

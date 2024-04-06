@@ -1,6 +1,6 @@
 {
     "name": "awesome-backend",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "CLI tool for creating a backend",
     "author": "Gleb Naumov <glenaudev@gmail.com>",
     "license": "MIT",
@@ -17,24 +17,22 @@
         "awesome-backend": "bin/cli.js"
     },
     "engines": {
-        "node": ">=20"
+        "node": ">=18"
     },
     "type": "module",
     "keywords": [
-        "awesome-backend",
+        "backend",
         "cli",
         "generator",
         "create-backend",
-        "mongoose",
         "npx",
         "tool",
         "create-app",
-        "express",
         "node",
         "create",
         "awesome",
-        "rest",
-        "app"
+        "app",
+        "awesome-backend"
     ],
     "dependencies": {
         "chalk": "^5.3.0",

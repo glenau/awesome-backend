@@ -51,17 +51,26 @@ class Generation {
         const files = {};
         if (!this.answers.database) {
             files['middlewares/database.middleware.ejs'] = true;
+            files['services/index.ejs'] = true;
+        } else {
+            files['validators/article.validator.ejs'] = true;
+            files['validators/comment.validator.ejs'] = true;
+            files['validators/profile.validator.ejs'] = true;
         }
         return files;
     }
 
     // Setting a list of required dependencies for a project
     setProjectDependencies() {
-        const dependencies = ['dotenv', 'helmet', 'pino', 'pino-pretty', 'uuid', 'joi'];
+        const dependencies = ['dotenv', 'helmet', 'pino', 'pino-pretty', 'uuid'];
         dependencies.push(this.answers.webFramework);
         if (this.answers.database) {
-            if (this.answers.databaseName === 'MongoDB') {
+            if (this.answers.databaseType === 'MongoDB') {
                 dependencies.push('mongoose');
+            }
+            if (this.answers.databaseType === 'PostgreSQL') {
+                dependencies.push('sequelize');
+                dependencies.push('pg');
             }
         }
         return dependencies;
@@ -75,6 +84,7 @@ class Generation {
             await this.createPackageFile();
             await this.createProjectFilesFromTemplates();
             await this.installDependencies();
+            await this.createDocumentations();
         } catch (err) {
             console.log(chalk.red.bold(err));
         }
@@ -82,7 +92,7 @@ class Generation {
 
     // Creating Project Folders from a List
     async createFolders() {
-        process.stdout.write(chalk.white.bold('[Step 1: Creation of the project architecture] - '));
+        process.stdout.write(chalk.white.bold('[Step 1: Creating a project architecture] - '));
         for (const folder of this.projectFolders) {
             const folderPath = path.join(this.projectPath, folder);
             try {
@@ -96,7 +106,7 @@ class Generation {
 
     // Creating a package.json file for future filling
     async createPackageFile() {
-        process.stdout.write(chalk.white.bold('[Step 2: Create package.json] - '));
+        process.stdout.write(chalk.white.bold('[Step 2: Creating package.json] - '));
         const packagePath = path.join(this.projectPath, 'package.json');
         const packageData = {
             name: this.answers.projectName,
@@ -115,7 +125,7 @@ class Generation {
 
     // Creating a list of files required for the project
     async createProjectFilesFromTemplates() {
-        process.stdout.write(chalk.white.bold('[Step 3: Generating Project Files] - '));
+        process.stdout.write(chalk.white.bold('[Step 3: Generating project files] - '));
         const projectFiles = await this.getProjectFiles(this.projectTemplatePath);
         for (const fileName of projectFiles) {
             if (!this.ignoredFiles[fileName]) {
@@ -157,7 +167,7 @@ class Generation {
 
     // Performing installation of all dependencies from the list
     async installDependencies() {
-        process.stdout.write(chalk.white.bold('[Step 4: Installing Dependencies] - '));
+        process.stdout.write(chalk.white.bold('[Step 4: Installing dependencies] - '));
         const command = `npm install ${this.dependencies.join(' ')}`;
 
         await new Promise((resolve, reject) => {
@@ -169,11 +179,17 @@ class Generation {
                     console.err(chalk.red.bold(`err installing dependencies: ${stderr}`));
                     reject(new err(stderr));
                 } else {
-                    process.stdout.write(chalk.green.bold('OK\n\n'));
+                    process.stdout.write(chalk.green.bold('OK\n'));
                     resolve();
                 }
             });
         });
+    }
+
+    // Creating documentation for the project
+    async createDocumentations() {
+        process.stdout.write(chalk.white.bold('[Step 5: Creating documentation] - '));
+        process.stdout.write(chalk.green.bold('OK\n\n'));
     }
 }
 

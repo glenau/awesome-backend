@@ -3,7 +3,7 @@ CLI tool for creating a backend with [Node.js](https://nodejs.org).
 ## Getting Started
 
 This is a Node.js module available through the npm registry.
-Before installing, [download and install Node.js](https://nodejs.org/en/download). Node.js 20 or higher is required.
+Before installing, [download and install Node.js](https://nodejs.org/en/download). Node.js 18 or higher is required.
 
 ### Installation
 

@@ -1,4 +1,8 @@
-<% if(database && databaseName === 'MongoDB') { -%>
+/*
+    Data model for working with the comments object
+*/
+
+<% if(database && databaseType === 'MongoDB') { -%>
 import { Schema, model } from 'mongoose';
 
 const CommentSchema = new Schema(
@@ -7,26 +11,38 @@ const CommentSchema = new Schema(
             type: String,
             required: [true, 'Body is required'],
         },
-        createdAt: {
-            type: Date,
-            default: Date.now,
-        },
     },
-    { versionKey: false },
+    { versionKey: false, timestamps: true }
 );
 
 const Comment = model('comments', CommentSchema);
 
 export default Comment;
 <% } -%>
+<% if(database && databaseType === 'PostgreSQL') { -%>
+import { DataTypes } from 'sequelize';
+import db from '../services/index.js';
+
+const Comment = db.sequelize.define('comments', {
+    body: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+    },
+});
+
+export default Comment;
+<% } -%>
 <% if(!database) { -%>
+import { v4 as uuidv4 } from 'uuid';
+
 class Comment {
-    constructor(id, body, createdAt) {
-        this.id = id;
+    constructor(body) {
+        this.id = uuidv4();
         this.body = body;
-        this.createdAt = createdAt;
+        this.createdAt = new Date().toISOString();
+        this.updatedAt = new Date().toISOString();
     }
 }
 
-export default Comment;     
+export default Comment;    
 <% } -%>

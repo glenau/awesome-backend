@@ -1,0 +1,17 @@
+/*
+    Middleware for validating specific parameters for profiles
+*/
+
+import Response from '../utils/response.js';
+
+function createProfileValidator(req, res, next) {
+    const name = req.body.name;
+    if (!name) {
+        Response.failure(req, res, 'Parameter name is missing', 400);
+        return;
+    }
+
+    next();
+}
+
+export { createProfileValidator }

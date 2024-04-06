@@ -1,11 +1,19 @@
+/*
+    Router for comments with handlers in the controller
+    comment.controller.js
+*/
+
 <% if(webFramework === 'express') { -%>
 import { Router } from 'express';
 import CommentController from '../controllers/comment.controller.js';
 import { idValidator } from '../validators/validator.js';
+<% if(!database) { -%>
+import { createCommentValidator } from '../validators/comment.validator.js';
+<% } -%>
 
 const router = Router();
 
-router.post('/', CommentController.createComment);
+router.post('/',<% if(!database) { -%> createCommentValidator,<% } -%>  CommentController.createComment);
 router.get('/', CommentController.getComments);
 router.get('/:id', idValidator, CommentController.getCommentByID);
 router.put('/:id', idValidator, CommentController.updateComment);

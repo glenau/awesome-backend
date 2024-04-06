@@ -1,14 +1,29 @@
-<% if(database && databaseName === 'MongoDB')  { -%>
-import mongoose from 'mongoose';
-<% } -%>
-import env from '../config/env.js';
-import models from '../models/index.js';
+/*
+    Creating a database connection object
+*/
 
-<% if(database && databaseName === 'MongoDB')  { -%>
+<% if(database && databaseType === 'MongoDB')  { -%>
+import mongoose from 'mongoose';
+import env from '../config/env.js';
+
 const db = {
     mongoose,
     url: env.mongoUrl,
-    models: models,
+};
+
+export default db;
+<% } -%>
+<% if(database && databaseType === 'PostgreSQL')  { -%>
+import { Sequelize } from 'sequelize';
+import env from '../config/env.js';
+
+const sequelize = new Sequelize(env.postgreSQLUrl, {
+    logging: false,
+});
+
+const db = {
+    sequelize,
+    url: env.postgreSQLUrl,
 };
 
 export default db;

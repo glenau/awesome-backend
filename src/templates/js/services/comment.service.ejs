@@ -1,9 +1,24 @@
+/*
+    Service for working only with the database
+    and comment object
+*/
+
 import Comment from '../models/comment.model.js';
 
 class CommentService {
     async createComment(data) {
+<% if(database && databaseType === 'MongoDB') { -%>
         const comment = new Comment(data);
         return await comment.save();
+<% } -%>
+<% if(database && databaseType === 'PostgreSQL') { -%>
+        const comment = Comment.build(data);
+        return await comment.save();
+<% } -%>
+<% if(!database) { -%>
+        const comment = new Comment(data.body);
+        return comment;
+<% } -%>
     }
 
     async findComments() {

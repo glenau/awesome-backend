@@ -1,9 +1,20 @@
+/*
+    Service for working only with the database
+    and profile object
+*/
+
 import Profile from '../models/profile.model.js';
 
 class ProfileService {
     async createProfile(data) {
+<% if(database && databaseType === 'MongoDB') { -%>
         const profile = new Profile(data);
         return await profile.save();
+<% } -%>
+<% if(!database) { -%>
+        const profile = new Profile(data.name);
+        return profile;
+<% } -%>
     }
 
     async findProfiles() {

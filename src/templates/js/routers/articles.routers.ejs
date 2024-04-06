@@ -1,11 +1,19 @@
+/*
+    Router for articles with handlers in the controller
+    article.controller.js
+*/
+
 <% if(webFramework === 'express') { -%>
 import { Router } from 'express';
 import ArticleController from '../controllers/article.controller.js';
 import { idValidator } from '../validators/validator.js';
+<% if(!database) { -%>
+import { createArticleValidator } from '../validators/article.validator.js';
+<% } -%>
 
 const router = Router();
 
-router.post('/', ArticleController.createArticle);
+router.post('/',<% if(!database) { -%> createArticleValidator,<% } -%> ArticleController.createArticle);
 router.get('/', ArticleController.getArticles);
 router.get('/:id', idValidator, ArticleController.getArticleByID);
 router.put('/:id', idValidator, ArticleController.updateArticle);

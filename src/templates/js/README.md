@@ -22,4 +22,4 @@ Before installing, [download and install Node.js](https://nodejs.org/en/download
 
 ## Usage
 
-_For more examples, please refer to the [Documentation](docs)_
+For more examples, please refer to the [Documentation](docs.md).

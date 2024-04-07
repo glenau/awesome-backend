@@ -16,6 +16,15 @@ Before installing, [download and install Node.js](https://nodejs.org/en/download
     npm start
     ```
 
+## Changelog
+
+### Version 0.1.1
+
+-   Added documentation generation
+-   Added PostgreSQL support
+-   Added support for working without a database
+-   Added query validators
+
 ## Roadmap
 
 -   [ ] Databases
@@ -31,7 +40,10 @@ Before installing, [download and install Node.js](https://nodejs.org/en/download
     -   [ ] [Redis](https://www.npmjs.com/package/redis)
 -   [x] Logging
     -   [x] [Pino + Pino-pretty](https://www.npmjs.com/package/pino)
--   [ ] Documentation
+-   [х] Documentation
+    -   [x] Technical part
+    -   [x] Installation and configuration
+    -   [x] API Specification
 
 See the [open issues](https://github.com/glenau/awesome-backend/issues) for a full list of proposed features (and known issues).
 

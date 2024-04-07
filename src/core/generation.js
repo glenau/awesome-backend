@@ -98,7 +98,7 @@ class Generation {
             try {
                 await fs.promises.mkdir(folderPath, { recursive: true });
             } catch (err) {
-                console.err(chalk.red.bold(`err creating folder ${folderPath}: ${err}`));
+                console.err(chalk.red.bold(`Error creating folder ${folderPath}: ${err}`));
             }
         }
         process.stdout.write(chalk.green.bold('OK\n'));
@@ -144,7 +144,7 @@ class Generation {
             const str = await ejs.renderFile(fileTemplatePath, this.answers);
             fs.writeFileSync(fileProjectPath, str);
         } catch (err) {
-            console.err(chalk.red.bold(`err generating file ${sourceFileName}: ${err}`));
+            console.err(chalk.red.bold(`Error generating file ${sourceFileName}: ${err}`));
         }
     }
 
@@ -173,10 +173,10 @@ class Generation {
         await new Promise((resolve, reject) => {
             exec(command, { cwd: this.projectPath }, (err, stdout, stderr) => {
                 if (err) {
-                    console.err(chalk.red.bold(`err installing dependencies: ${err.message}`));
+                    console.err(chalk.red.bold(`Error installing dependencies: ${err.message}\n`));
                     reject(err);
                 } else if (stderr) {
-                    console.err(chalk.red.bold(`err installing dependencies: ${stderr}`));
+                    console.err(chalk.red.bold(`Error installing dependencies: ${stderr}\n`));
                     reject(new err(stderr));
                 } else {
                     process.stdout.write(chalk.green.bold('OK\n'));
@@ -189,6 +189,156 @@ class Generation {
     // Creating documentation for the project
     async createDocumentations() {
         process.stdout.write(chalk.white.bold('[Step 5: Creating documentation] - '));
+        const docsPath = path.join(this.projectPath, 'docs.md');
+        let content = `Documentation for the '${this.answers.projectName}' project.\n\n`;
+        content += `\`\`\`\nVersion: 1.0.0.\n\`\`\`\n`;
+        content += '\n## Table of Contents\n\n';
+
+        // ## Structure
+        content += `\n## Structure\n\n`;
+        let struct = `
+        \`\`\`yml
+        config: Directory for configuration files
+        -   env.js: Environment configuration file
+        controllers: Directory for controller files
+        -   article.controller.js: Controller for articles
+        -   comment.controller.js: Controller for comments
+        -   profile.controller.js: Controller for profiles
+        middlewares: Directory for middleware files
+        `;
+        if (this.answers.database) {
+            struct += `
+            -   database.middleware.js: Middleware for database connection
+            `;
+        }
+
+        struct += `
+        -   error.middleware.js: Middleware for error handling
+        -   index.js: Object of all middlewares
+        -   json.middleware.js: Middleware for json parsing
+        -   notFound.middleware.js: Middleware for handling requests to non-existent resources
+        -   requestID.middleware.js: Middleware for setting request ID
+        -   routers.middleware.js: Middleware for connecting all routers
+        -   security.middleware.js: Middleware for attaching secure headers to the response
+        -   urlEncoded.middleware.js: Middleware for handling URL-encoded data
+        models: Directory for model files
+        -   article.model.js: Model for articles
+        -   comment.model.js: Model for comments
+        -   profile.model.js: Model for profiles
+        node_modules: Directory containing installed Node.js modules
+        routers: Directory for router files
+        -   articles.routers.js: Router for articles
+        -   comments.routers.js: Router for comments
+        -   index.js: Connecting all routers
+        -   profiles.routers.js: Router for profiles
+        services: Directory of services for working with data
+        -   article.service.js: Service for article-related operations
+        -   comment.service.js: Service for comment-related operations
+        `;
+
+        if (this.answers.database) {
+            struct += `
+            -   index.js: Creating a database connection object
+            `;
+        }
+
+        struct += `
+        -   profile.service.js: Service for profile-related operations
+        utils: Directory for utility files
+        -   logger.js: Utility for logging
+        -   response.js: Utility for generating HTTP responses
+        validators: Directory for validator files
+        `;
+
+        if (!this.answers.database) {
+            struct += `
+            -   article.validator.js: Middleware for validating articles
+            -   comment.validator.js: Middleware for validating comments
+            -   profile.validator.js: Middleware for validating profiles
+            `;
+        }
+
+        struct += `
+        -   validator.js: Middleware for validating API
+        .env: File for storing environment variables
+        .env.example: Example file for storing environment variables
+        .gitignore: Git configuration file for ignoring specified files
+        docs.md: Documentation
+        index.js: Main application file
+        package-lock.json: File containing locked dependencies versions
+        package.json: Project configuration file in JSON format
+        README.md: Instructions for installation and usage of the project
+        `;
+
+        struct += `
+        \`\`\`
+        `;
+
+        content += struct.replace(/^\s+/gm, '').replace(/^-/gm, '\t-');
+
+        // ## Dependencies
+        await new Promise((resolve, reject) => {
+            fs.readFile(path.join(this.projectPath, 'package.json'), 'utf8', (err, data) => {
+                if (err) {
+                    return;
+                }
+                const packageJson = JSON.parse(data);
+                const dependencies = packageJson.dependencies;
+                if (dependencies) {
+                    const dependencyList = Object.keys(dependencies)
+                        .map((dep) => `${dep}: ${dependencies[dep]}`)
+                        .join('\n');
+                    content += `\n## Dependencies\n\n\`\`\`\n${dependencyList}\n\`\`\`\n`;
+                }
+                resolve();
+            });
+        });
+
+        // ## Configuration
+        content += `\n## Configuration\n`;
+
+        // ## Usage
+        content += `\n## Usage\n`;
+
+        // ## API
+        content += `\n## API\n`;
+        content += `\nFor more examples, please refer to the [API Documentation](swagger.yaml).\n`;
+
+        // ## Troubleshooting
+        content += `\n## Troubleshooting\n`;
+
+        // ## Contact
+        content += `\n## Contact\n`;
+
+        // Generating table of contents
+        let headings = content.match(/^#{1,6}\s+.+/gm);
+        if (headings) {
+            let tableOfContents = headings
+                .map((heading) => {
+                    const level = heading.match(/^#{1,6}/)[0].length;
+                    const title = heading.replace(/^#{1,6}\s+/, '');
+                    const anchorLink = title.toLowerCase().replace(/\s+/g, '-');
+                    return `${''.repeat(level - 1)}-   [${title}](#${anchorLink})`;
+                })
+                .join('\n');
+            const lines = content.split('\n');
+            lines.splice(8, 0, tableOfContents);
+            content = lines.join('\n');
+        }
+
+        fs.readFile(docsPath, 'utf8', (err, data) => {
+            if (err) {
+                return;
+            }
+
+            data += content;
+
+            fs.writeFile(docsPath, data, 'utf8', (err) => {
+                if (err) {
+                    return;
+                }
+            });
+        });
         process.stdout.write(chalk.green.bold('OK\n\n'));
     }
 }

@@ -79,9 +79,14 @@ async function run() {
         }
 
         console.log(chalk.cyan.bold('Documentation for your project can be found in the files:'));
-        console.log(chalk.white.bold('- ') + chalk.green.bold('README.md'));
-        console.log(chalk.white.bold('- ') + chalk.green.bold('docs.md\n'));
-        console.log(chalk.magenta.bold('At this point I say goodbye and wish you good luck!'));
+        console.log(
+            chalk.white.bold('- ') +
+                chalk.green.bold('README.md') +
+                chalk.white.bold(' (Instructions for installation and usage of the project)')
+        );
+        console.log(chalk.white.bold('- ') + chalk.green.bold('docs.md') + chalk.white.bold(' (Technical documentation for the project)'));
+        console.log(chalk.white.bold('- ') + chalk.green.bold('swagger.yaml') + chalk.white.bold(' (API Specification)'));
+        console.log(chalk.magenta.bold('\nAt this point I say goodbye and wish you good luck!'));
     } catch (err) {
         console.log(chalk.red.bold(err));
     }

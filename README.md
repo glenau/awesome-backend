@@ -40,7 +40,7 @@ Before installing, [download and install Node.js](https://nodejs.org/en/download
     -   [ ] [Redis](https://www.npmjs.com/package/redis)
 -   [x] Logging
     -   [x] [Pino + Pino-pretty](https://www.npmjs.com/package/pino)
--   [х] Documentation
+-   [x] Documentation
     -   [x] Technical part
     -   [x] Installation and configuration
     -   [x] API Specification

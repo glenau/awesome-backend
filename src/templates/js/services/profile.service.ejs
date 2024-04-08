@@ -11,6 +11,10 @@ class ProfileService {
         const profile = new Profile(data);
         return await profile.save();
 <% } -%>
+<% if(database && databaseType === 'PostgreSQL') { -%>
+        const profile = Profile.build(data);
+        return await profile.save();
+<% } -%>
 <% if(!database) { -%>
         const profile = new Profile(data.name);
         return profile;
@@ -18,19 +22,56 @@ class ProfileService {
     }
 
     async findProfiles() {
+<% if(database && databaseType === 'MongoDB') { -%>
         return await Profile.find();
+<% } -%>
+<% if(database && databaseType === 'PostgreSQL') { -%>
+        return await Profile.findAll();
+<% } -%>
+<% if(!database) { -%>
+        return new Profile('John Doe');
+<% } -%>
     }
 
     async findProfileByID(id) {
+<% if(database && databaseType === 'MongoDB') { -%>
         return await Profile.findById(id);
+<% } -%>
+<% if(database && databaseType === 'PostgreSQL') { -%>
+        return await Profile.findByPk(id);
+<% } -%>
+<% if(!database) { -%>
+        return new Profile('John Doe');;
+<% } -%>
     }
 
     async updateProfileByID(id, data) {
+<% if(database && databaseType === 'MongoDB') { -%>
         return await Profile.findByIdAndUpdate(id, data, { new: true });
+<% } -%>
+<% if(database && databaseType === 'PostgreSQL') { -%>
+        const profile = await Profile.findByPk(id);
+        return await profile.update(data);
+<% } -%>
+<% if(!database) { -%>
+        const profile = new Profile(`${data.name} NEW`);
+        return profile;
+<% } -%>
     }
 
     async deleteProfileByID(id) {
+<% if(database && databaseType === 'MongoDB') { -%>
         return await Profile.findByIdAndDelete(id);
+<% } -%>
+<% if(database && databaseType === 'PostgreSQL') { -%>
+        const profile = await Profile.findByPk(id);
+        await profile.destroy();
+        return profile;
+<% } -%>
+<% if(!database) { -%>
+        const profile = new Profile('John Doe');
+        return profile;
+<% } -%>
     }
 }
 

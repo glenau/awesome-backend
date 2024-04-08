@@ -98,7 +98,7 @@ class Generation {
             try {
                 await fs.promises.mkdir(folderPath, { recursive: true });
             } catch (err) {
-                console.err(chalk.red.bold(`Error creating folder ${folderPath}: ${err}`));
+                console.error(chalk.red.bold(`Error creating folder ${folderPath}: ${err}`));
             }
         }
         process.stdout.write(chalk.green.bold('OK\n'));
@@ -144,7 +144,7 @@ class Generation {
             const str = await ejs.renderFile(fileTemplatePath, this.answers);
             fs.writeFileSync(fileProjectPath, str);
         } catch (err) {
-            console.err(chalk.red.bold(`Error generating file ${sourceFileName}: ${err}`));
+            console.error(chalk.red.bold(`Error generating file ${sourceFileName}: ${err}`));
         }
     }
 
@@ -173,10 +173,10 @@ class Generation {
         await new Promise((resolve, reject) => {
             exec(command, { cwd: this.projectPath }, (err, stdout, stderr) => {
                 if (err) {
-                    console.err(chalk.red.bold(`Error installing dependencies: ${err.message}\n`));
+                    console.error(chalk.red.bold(`Error installing dependencies: ${err.message}\n`));
                     reject(err);
                 } else if (stderr) {
-                    console.err(chalk.red.bold(`Error installing dependencies: ${stderr}\n`));
+                    console.error(chalk.red.bold(`Error installing dependencies: ${stderr}\n`));
                     reject(new err(stderr));
                 } else {
                     process.stdout.write(chalk.green.bold('OK\n'));
@@ -326,6 +326,7 @@ class Generation {
             content = lines.join('\n');
         }
 
+        // Update docs.md
         fs.readFile(docsPath, 'utf8', (err, data) => {
             if (err) {
                 return;
@@ -335,6 +336,32 @@ class Generation {
 
             fs.writeFile(docsPath, data, 'utf8', (err) => {
                 if (err) {
+                    return;
+                }
+            });
+        });
+
+        // Swagger specification update
+        const swaggerPath = path.join(this.projectPath, 'swagger.yaml');
+        const swaggerReplacements = {
+            SWAGGER_TITLE: this.answers.projectName,
+            SWAGGER_DESCRIPTION: `This is '${this.answers.projectName}' project server based on the OpenAPI 3.0 specification.`,
+            SWAGGER_URL: `localhost:${this.answers.serverPort}/api`,
+        };
+
+        fs.readFile(swaggerPath, 'utf8', (err, data) => {
+            if (err) {
+                console.error(chalk.red.bold(`Error reading Swagger file: ${err}`));
+                return;
+            }
+
+            for (const [word, replacement] of Object.entries(swaggerReplacements)) {
+                data = data.replace(new RegExp(word, 'g'), replacement);
+            }
+
+            fs.writeFile(swaggerPath, data, 'utf8', (err) => {
+                if (err) {
+                    console.error(chalk.red.bold(`Error updating Swagger file: ${err}`));
                     return;
                 }
             });

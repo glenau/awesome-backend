@@ -1,0 +1,421 @@
+openapi: 3.0.0
+info:
+  title: SWAGGER_TITLE
+  description: |-
+    SWAGGER_DESCRIPTION
+
+    Some useful links:
+      - [Project repository](https://github.com/glenau/awesome-backend)
+      - [NPM package](https://www.npmjs.com/package/awesome-backend)
+  version: 1.0.0
+  contact:
+    email: glenaudev@gmail.com
+  license:
+    name: MIT License
+    url: https://github.com/glenau/awesome-backend/blob/main/LICENSE
+servers:
+  - url: SWAGGER_URL
+tags:
+  - name: articles
+    description: Everything about your Articles
+  - name: comments
+    description: Everything about your Comments
+  - name: profiles
+    description: Everything about your Profiles
+components:
+  schemas:
+    Article:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 1
+          readOnly: true
+        title:
+          type: string
+          example: 'Awesome article'
+        body:
+          type: string
+          example: 'This is an awesome article about'
+        createdAt:
+          type: string
+          format: date-time
+          example: '2024-09-19T12:00:00Z'
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2024-09-19T12:00:00Z'
+          readOnly: true
+      required:
+        - title
+        - body
+    ArticleResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: true
+        data:
+          $ref: '#/components/schemas/Article'
+    ArticlesResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Article'
+    Comment:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 1
+          readOnly: true
+        body:
+          type: string
+          example: 'This is a comment'
+        createdAt:
+          type: string
+          format: date-time
+          example: '2024-09-19T12:00:00Z'
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2024-09-19T12:00:00Z'
+          readOnly: true
+      required:
+        - body
+    CommentResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: true
+        data:
+          $ref: '#/components/schemas/Comment'
+    CommentsResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+    Profile:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 1
+          readOnly: true
+        name:
+          type: string
+          example: 'John Doe'
+        createdAt:
+          type: string
+          format: date-time
+          example: '2024-09-19T12:00:00Z'
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2024-09-19T12:00:00Z'
+          readOnly: true
+      required:
+        - name
+    ProfileResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: true
+        data:
+          $ref: '#/components/schemas/Profile'
+    ProfilesResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Profile'
+paths:
+  /articles:
+    post:
+      tags:
+        - articles
+      summary: Create article
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Article'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleResponse' 
+    get:
+      tags:
+        - articles
+      summary: Get list of articles
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticlesResponse'
+  /articles/{id}:
+    get:
+      tags:
+        - articles
+      summary: Get article by ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the article
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleResponse'
+    put:
+      tags:
+        - articles
+      summary: Update article
+      parameters:
+        - name: id
+          in: path
+          description: ID of the article
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Article'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleResponse'
+    delete:
+      tags:
+        - articles
+      summary: Delete article
+      parameters:
+        - name: id
+          in: path
+          description: ID of the article
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleResponse'
+  /comments:
+    post:
+      tags:
+        - comments
+      summary: Create comment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comment'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentResponse' 
+    get:
+      tags:
+        - comments
+      summary: Get list of comments
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentsResponse'
+  /comments/{id}:
+    get:
+      tags:
+        - comments
+      summary: Get comment by ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the comment
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentResponse'
+    put:
+      tags:
+        - comments
+      summary: Update comment
+      parameters:
+        - name: id
+          in: path
+          description: ID of the comment
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comment'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentResponse'
+    delete:
+      tags:
+        - comments
+      summary: Delete comment
+      parameters:
+        - name: id
+          in: path
+          description: ID of the comment
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentResponse'
+  /profiles:
+    post:
+      tags:
+        - profiles
+      summary: Create profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Profile'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileResponse' 
+    get:
+      tags:
+        - profiles
+      summary: Get list of profiles
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfilesResponse'
+  /profiles/{id}:
+    get:
+      tags:
+        - profiles
+      summary: Get profile by ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the profile
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileResponse'
+    put:
+      tags:
+        - profiles
+      summary: Update profile
+      parameters:
+        - name: id
+          in: path
+          description: ID of the profile
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Profile'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileResponse'
+    delete:
+      tags:
+        - profiles
+      summary: Delete profile
+      parameters:
+        - name: id
+          in: path
+          description: ID of the profile
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileResponse'

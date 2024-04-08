@@ -36,7 +36,7 @@ components:
           example: 'Awesome article'
         body:
           type: string
-          example: 'This is an awesome article about'
+          example: 'This is an awesome article'
         createdAt:
           type: string
           format: date-time
@@ -77,7 +77,7 @@ components:
           readOnly: true
         body:
           type: string
-          example: 'This is a comment'
+          example: 'This is an awesome comment'
         createdAt:
           type: string
           format: date-time

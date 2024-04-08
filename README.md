@@ -11,7 +11,8 @@ Before installing, [download and install Node.js](https://nodejs.org/en/download
     ```sh
     npx awesome-backend
     ```
-2.  Start the project
+2.  Select backend options
+3.  Start the project
     ```sh
     npm start
     ```
@@ -27,9 +28,9 @@ Before installing, [download and install Node.js](https://nodejs.org/en/download
 
 ## Roadmap
 
--   [ ] Databases
+-   [x] Databases
     -   [x] [MongoDB (Mongoose)](https://www.npmjs.com/package/mongoose)
-    -   [ ] [PostgreSQL (Sequelize)](https://www.npmjs.com/package/sequelize)
+    -   [x] [PostgreSQL (Sequelize)](https://www.npmjs.com/package/sequelize)
 -   [ ] Servers/Frameworks
     -   [x] [Express](https://www.npmjs.com/package/express)
     -   [ ] [NestJS](https://www.npmjs.com/package/@nestjs/core)
@@ -40,8 +41,8 @@ Before installing, [download and install Node.js](https://nodejs.org/en/download
     -   [ ] [Redis](https://www.npmjs.com/package/redis)
 -   [x] Logging
     -   [x] [Pino + Pino-pretty](https://www.npmjs.com/package/pino)
--   [x] Documentation
-    -   [x] Technical part
+-   [ ] Documentation
+    -   [ ] Technical part
     -   [x] Installation and configuration
     -   [x] API Specification
 

@@ -22,19 +22,56 @@ class ArticleService {
     }
 
     async findArticles() {
+<% if(database && databaseType === 'MongoDB') { -%>
         return await Article.find();
+<% } -%>
+<% if(database && databaseType === 'PostgreSQL') { -%>
+        return await Article.findAll();
+<% } -%>
+<% if(!database) { -%>
+        return new Article('Awesome article', 'This is an awesome article');
+<% } -%>
     }
 
     async findArticleByID(id) {
+<% if(database && databaseType === 'MongoDB') { -%>
         return await Article.findById(id);
+<% } -%>
+<% if(database && databaseType === 'PostgreSQL') { -%>
+        return await Article.findByPk(id);
+<% } -%>
+<% if(!database) { -%>
+        return new Article('Awesome article', 'This is an awesome article');;
+<% } -%>
     }
 
     async updateArticleByID(id, data) {
+<% if(database && databaseType === 'MongoDB') { -%>
         return await Article.findByIdAndUpdate(id, data, { new: true });
+<% } -%>
+<% if(database && databaseType === 'PostgreSQL') { -%>
+        const article = await Article.findByPk(id);
+        return await article.update(data);
+<% } -%>
+<% if(!database) { -%>
+        const article = new Article(`${data.title} NEW`, `${data.body} NEW`);
+        return article;
+<% } -%>
     }
 
     async deleteArticleByID(id) {
+<% if(database && databaseType === 'MongoDB') { -%>
         return await Article.findByIdAndDelete(id);
+<% } -%>
+<% if(database && databaseType === 'PostgreSQL') { -%>
+        const article = await Article.findByPk(id);
+        await article.destroy();
+        return article;
+<% } -%>
+<% if(!database) { -%>
+        const article = new Article('Awesome article', 'This is an awesome article');
+        return article;
+<% } -%>
     }
 }
 

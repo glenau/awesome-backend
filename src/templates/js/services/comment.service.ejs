@@ -22,19 +22,56 @@ class CommentService {
     }
 
     async findComments() {
+<% if(database && databaseType === 'MongoDB') { -%>
         return await Comment.find();
+<% } -%>
+<% if(database && databaseType === 'PostgreSQL') { -%>
+        return await Comment.findAll();
+<% } -%>
+<% if(!database) { -%>
+        return new Comment('This is an awesome comment');
+<% } -%>
     }
 
     async findCommentByID(id) {
+<% if(database && databaseType === 'MongoDB') { -%>
         return await Comment.findById(id);
+<% } -%>
+<% if(database && databaseType === 'PostgreSQL') { -%>
+        return await Comment.findByPk(id);
+<% } -%>
+<% if(!database) { -%>
+        return new Comment('This is an awesome comment');;
+<% } -%>
     }
 
     async updateCommentByID(id, data) {
+<% if(database && databaseType === 'MongoDB') { -%>
         return await Comment.findByIdAndUpdate(id, data, { new: true });
+<% } -%>
+<% if(database && databaseType === 'PostgreSQL') { -%>
+        const comment = await Comment.findByPk(id);
+        return await comment.update(data);
+<% } -%>
+<% if(!database) { -%>
+        const comment = new Comment(`${data.body} NEW`);
+        return comment;
+<% } -%>
     }
 
     async deleteCommentByID(id) {
+<% if(database && databaseType === 'MongoDB') { -%>
         return await Comment.findByIdAndDelete(id);
+<% } -%>
+<% if(database && databaseType === 'PostgreSQL') { -%>
+        const comment = await Comment.findByPk(id);
+        await comment.destroy();
+        return comment;
+<% } -%>
+<% if(!database) { -%>
+        const comment = new Comment('This is an awesome comment');
+        return comment;
+<% } -%>
     }
 }
 

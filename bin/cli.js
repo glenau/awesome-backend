@@ -49,6 +49,8 @@ async function run() {
                     if (err) {
                         console.log(chalk.yellow.bold(`\n[WARNING] - Looks like you don't have MongoDB installed`));
                         warning = true;
+                    } else {
+                        console.log(chalk.cyan.bold(`\nMongoDB detected - `) + chalk.green.bold(stdout.trim()));
                     }
                     resolve();
                 });
@@ -62,6 +64,8 @@ async function run() {
                     if (err) {
                         console.log(chalk.yellow.bold(`\n[WARNING] - Looks like you don't have PostgreSQL installed`));
                         warning = true;
+                    } else {
+                        console.log(chalk.cyan.bold(`\nPostgreSQL detected - `) + chalk.green.bold(stdout.trim()));
                     }
                     resolve();
                 });

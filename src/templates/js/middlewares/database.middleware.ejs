@@ -4,12 +4,12 @@
 
 import db from '../services/index.js';
 import logger from '../utils/logger.js';
-<% if(database && databaseType === 'PostgreSQL') { -%>
+<% if(databaseType === 'PostgreSQL') { -%>
 import pg from 'pg';  
 <% } -%>
 
 async function setupDatabase() {
-<% if(database && databaseType === 'MongoDB') { -%>
+<% if(databaseType === 'MongoDB') { -%>
     try {
         await db.mongoose.connect(db.url, {});
         logger.info(`Database connected - ${db.url}`);
@@ -18,7 +18,7 @@ async function setupDatabase() {
         process.exit(1);
     }
 <% } -%>
-<% if(database && databaseType === 'PostgreSQL') { -%>
+<% if(databaseType === 'PostgreSQL') { -%>
     try {
         const client = new pg.Client({
             host: 'localhost',

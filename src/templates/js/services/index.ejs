@@ -2,7 +2,7 @@
     Creating a database connection object
 */
 
-<% if(database && databaseType === 'MongoDB')  { -%>
+<% if(databaseType === 'MongoDB')  { -%>
 import mongoose from 'mongoose';
 import env from '../config/env.js';
 
@@ -13,7 +13,7 @@ const db = {
 
 export default db;
 <% } -%>
-<% if(database && databaseType === 'PostgreSQL')  { -%>
+<% if(databaseType === 'PostgreSQL')  { -%>
 import { Sequelize } from 'sequelize';
 import env from '../config/env.js';
 

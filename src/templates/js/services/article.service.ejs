@@ -7,11 +7,11 @@ import Article from '../models/article.model.js';
 
 class ArticleService {
     async createArticle(data) {
-<% if(database && databaseType === 'MongoDB') { -%>
+<% if(databaseType === 'MongoDB') { -%>
         const article = new Article(data);
         return await article.save();
 <% } -%>
-<% if(database && databaseType === 'PostgreSQL') { -%>
+<% if(databaseType === 'PostgreSQL') { -%>
         const article = Article.build(data);
         return await article.save();
 <% } -%>
@@ -22,10 +22,10 @@ class ArticleService {
     }
 
     async findArticles() {
-<% if(database && databaseType === 'MongoDB') { -%>
+<% if(databaseType === 'MongoDB') { -%>
         return await Article.find();
 <% } -%>
-<% if(database && databaseType === 'PostgreSQL') { -%>
+<% if(databaseType === 'PostgreSQL') { -%>
         return await Article.findAll();
 <% } -%>
 <% if(!database) { -%>
@@ -34,10 +34,10 @@ class ArticleService {
     }
 
     async findArticleByID(id) {
-<% if(database && databaseType === 'MongoDB') { -%>
+<% if(databaseType === 'MongoDB') { -%>
         return await Article.findById(id);
 <% } -%>
-<% if(database && databaseType === 'PostgreSQL') { -%>
+<% if(databaseType === 'PostgreSQL') { -%>
         return await Article.findByPk(id);
 <% } -%>
 <% if(!database) { -%>
@@ -46,10 +46,10 @@ class ArticleService {
     }
 
     async updateArticleByID(id, data) {
-<% if(database && databaseType === 'MongoDB') { -%>
+<% if(databaseType === 'MongoDB') { -%>
         return await Article.findByIdAndUpdate(id, data, { new: true });
 <% } -%>
-<% if(database && databaseType === 'PostgreSQL') { -%>
+<% if(databaseType === 'PostgreSQL') { -%>
         const article = await Article.findByPk(id);
         return await article.update(data);
 <% } -%>
@@ -60,10 +60,10 @@ class ArticleService {
     }
 
     async deleteArticleByID(id) {
-<% if(database && databaseType === 'MongoDB') { -%>
+<% if(databaseType === 'MongoDB') { -%>
         return await Article.findByIdAndDelete(id);
 <% } -%>
-<% if(database && databaseType === 'PostgreSQL') { -%>
+<% if(databaseType === 'PostgreSQL') { -%>
         const article = await Article.findByPk(id);
         await article.destroy();
         return article;

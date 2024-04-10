@@ -7,11 +7,11 @@ import Profile from '../models/profile.model.js';
 
 class ProfileService {
     async createProfile(data) {
-<% if(database && databaseType === 'MongoDB') { -%>
+<% if(databaseType === 'MongoDB') { -%>
         const profile = new Profile(data);
         return await profile.save();
 <% } -%>
-<% if(database && databaseType === 'PostgreSQL') { -%>
+<% if(databaseType === 'PostgreSQL') { -%>
         const profile = Profile.build(data);
         return await profile.save();
 <% } -%>
@@ -22,10 +22,10 @@ class ProfileService {
     }
 
     async findProfiles() {
-<% if(database && databaseType === 'MongoDB') { -%>
+<% if(databaseType === 'MongoDB') { -%>
         return await Profile.find();
 <% } -%>
-<% if(database && databaseType === 'PostgreSQL') { -%>
+<% if(databaseType === 'PostgreSQL') { -%>
         return await Profile.findAll();
 <% } -%>
 <% if(!database) { -%>
@@ -34,10 +34,10 @@ class ProfileService {
     }
 
     async findProfileByID(id) {
-<% if(database && databaseType === 'MongoDB') { -%>
+<% if(databaseType === 'MongoDB') { -%>
         return await Profile.findById(id);
 <% } -%>
-<% if(database && databaseType === 'PostgreSQL') { -%>
+<% if(databaseType === 'PostgreSQL') { -%>
         return await Profile.findByPk(id);
 <% } -%>
 <% if(!database) { -%>
@@ -46,10 +46,10 @@ class ProfileService {
     }
 
     async updateProfileByID(id, data) {
-<% if(database && databaseType === 'MongoDB') { -%>
+<% if(databaseType === 'MongoDB') { -%>
         return await Profile.findByIdAndUpdate(id, data, { new: true });
 <% } -%>
-<% if(database && databaseType === 'PostgreSQL') { -%>
+<% if(databaseType === 'PostgreSQL') { -%>
         const profile = await Profile.findByPk(id);
         return await profile.update(data);
 <% } -%>
@@ -60,10 +60,10 @@ class ProfileService {
     }
 
     async deleteProfileByID(id) {
-<% if(database && databaseType === 'MongoDB') { -%>
+<% if(databaseType === 'MongoDB') { -%>
         return await Profile.findByIdAndDelete(id);
 <% } -%>
-<% if(database && databaseType === 'PostgreSQL') { -%>
+<% if(databaseType === 'PostgreSQL') { -%>
         const profile = await Profile.findByPk(id);
         await profile.destroy();
         return profile;

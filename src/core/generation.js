@@ -44,7 +44,7 @@ class Generation {
 
     // Setting the project folder list
     setProjectFolders() {
-        return ['config', 'controllers', 'middlewares', 'models', 'routers', 'services', 'utils', 'validators'];
+        return ['config', 'controllers', 'middlewares', 'models', 'routers', 'services', 'utils', 'validators', 'docs'];
     }
 
     setIgnoredFiles() {
@@ -52,11 +52,18 @@ class Generation {
         if (!this.answers.database) {
             files['middlewares/database.middleware.ejs'] = true;
             files['services/index.ejs'] = true;
+            files['docs/database.md'] = true;
         } else {
             files['validators/article.validator.ejs'] = true;
             files['validators/comment.validator.ejs'] = true;
             files['validators/profile.validator.ejs'] = true;
         }
+
+        if (!this.answers.pm2Support) {
+            files['docs/pm2.md'] = true;
+            files['ecosystem.config.ejs'] = true;
+        }
+
         return files;
     }
 
@@ -64,14 +71,14 @@ class Generation {
     setProjectDependencies() {
         const dependencies = ['dotenv', 'helmet', 'pino', 'pino-pretty', 'uuid'];
         dependencies.push(this.answers.webFramework);
-        if (this.answers.database) {
-            if (this.answers.databaseType === 'MongoDB') {
-                dependencies.push('mongoose');
-            }
-            if (this.answers.databaseType === 'PostgreSQL') {
-                dependencies.push('sequelize');
-                dependencies.push('pg');
-            }
+
+        if (this.answers.databaseType === 'MongoDB') {
+            dependencies.push('mongoose');
+        }
+
+        if (this.answers.databaseType === 'PostgreSQL') {
+            dependencies.push('sequelize');
+            dependencies.push('pg');
         }
         return dependencies;
     }
@@ -111,14 +118,18 @@ class Generation {
         const packageData = {
             name: this.answers.projectName,
             version: '1.0.0',
-            description: 'Enter your project description',
-            author: 'Enter your name',
+            description: 'The project is based on the NPM package awesome-backend',
             main: 'index.js',
             type: 'module',
             scripts: {
                 start: 'node index.js',
             },
         };
+
+        if (this.answers.pm2Support) {
+            packageData.scripts.dev = 'pm2 start ecosystem.config.cjs --watch';
+        }
+
         fs.writeFileSync(packagePath, JSON.stringify(packageData, null, 4), 'utf8');
         process.stdout.write(chalk.green.bold('OK\n'));
     }
@@ -189,10 +200,8 @@ class Generation {
     // Creating documentation for the project
     async createDocumentations() {
         process.stdout.write(chalk.white.bold('[Step 5: Creating documentation] - '));
-        const docsPath = path.join(this.projectPath, 'docs.md');
-        let content = `Documentation for the '${this.answers.projectName}' project.\n\n`;
-        content += `\`\`\`\nVersion: 1.0.0.\n\`\`\`\n`;
-        content += '\n## Table of Contents\n\n';
+        const docsPath = path.join(this.projectPath, 'docs/project.md');
+        let content = '\n## Table of Contents\n\n';
 
         // ## Structure
         content += `\n## Structure\n\n`;
@@ -204,8 +213,27 @@ class Generation {
         -   article.controller.js: Controller for articles
         -   comment.controller.js: Controller for comments
         -   profile.controller.js: Controller for profiles
+        docs: Project documentation
+        `;
+
+        if (this.answers.database) {
+            struct += `
+            -   database.md: Database Documentation
+            `;
+        }
+
+        if (this.answers.pm2Support) {
+            struct += `
+            -   pm2.md: Process Manager Documentation
+            `;
+        }
+
+        struct += `
+        -   project.md: General documentation
+        -   swagger.yaml: API specification
         middlewares: Directory for middleware files
         `;
+
         if (this.answers.database) {
             struct += `
             -   database.middleware.js: Middleware for database connection
@@ -263,7 +291,7 @@ class Generation {
         .env: File for storing environment variables
         .env.example: Example file for storing environment variables
         .gitignore: Git configuration file for ignoring specified files
-        docs.md: Documentation
+        ecosystem.config.cjs: PM2 configuration file
         index.js: Main application file
         package-lock.json: File containing locked dependencies versions
         package.json: Project configuration file in JSON format
@@ -297,18 +325,54 @@ class Generation {
         // ## Configuration
         content += `\n## Configuration\n`;
 
-        // ## Usage
-        content += `\n## Usage\n`;
+        if (this.answers.databaseType === 'MongoDB') {
+            content += `\n### MongoDB\n`;
+            content += `\n_You can find detailed information in the [Database documentation](database.md)._\n`;
+            content += `\n-   Collections:\n`;
+            content += `    -   Articles\n`;
+            content += `    -   Comments\n`;
+            content += `    -   Profiles\n`;
+            content += `-   URL:\n`;
+            content += `    \`\`\`\n    mongodb://localhost:27017/${this.answers.databaseName}\n    \`\`\`\n`;
+        }
+
+        if (this.answers.databaseType === 'PostgreSQL') {
+            content += `\n### PostgreSQL\n`;
+            content += `\n_You can find detailed information in the [Database documentation](database.md)._\n`;
+            content += `\n-   Tables:\n`;
+            content += `    -   Articles\n`;
+            content += `    -   Comments\n`;
+            content += `    -   Profiles\n`;
+            content += `-   URL:\n`;
+            content += `    \`\`\`\n    postgres://localhost:5432/${this.answers.databaseName}\n    \`\`\`\n`;
+        }
 
         // ## API
         content += `\n## API\n`;
-        content += `\nFor more examples, please refer to the [API Documentation](swagger.yaml).\n`;
+        content += `\n_For more examples, please refer to the [API documentation](swagger.yaml)._\n`;
 
-        // ## Troubleshooting
-        content += `\n## Troubleshooting\n`;
+        // ## Problems
+        content += `\n## Problems\n`;
+        content += `\n_If you have not found a solution to your problem, please write to me by [email](mailto:glenaudev@gmail.com)._\n`;
+
+        if (this.answers.database) {
+            content += `\n### The application cannot connect to the database\n`;
+            content += `\n-   Check if you have it installed ${this.answers.databaseType}\n`;
+            content += `-   Check if your ${this.answers.databaseType} is running\n`;
+            content += `-   Check if the database '${this.answers.databaseName}' has been created\n`;
+            if (this.answers.databaseType === 'MongoDB') {
+                content += `-   Check the path 'mongodb://localhost:27017/${this.answers.databaseName}' to the ${this.answers.databaseType}\n`;
+            }
+            if (this.answers.databaseType === 'PostgreSQL') {
+                content += `-   Check the path 'postgres://localhost:5432/${this.answers.databaseName}' to the ${this.answers.databaseType}\n`;
+            }
+        }
 
         // ## Contact
         content += `\n## Contact\n`;
+        content += `\n-   [Support](mailto:glenaudev@gmail.com)\n`;
+        content += `-   [NPM](https://www.npmjs.com/package/awesome-backend)\n`;
+        content += `-   [GitHub](https://github.com/glenau/awesome-backend)\n`;
 
         // Generating table of contents
         let headings = content.match(/^#{1,6}\s+.+/gm);
@@ -318,11 +382,16 @@ class Generation {
                     const level = heading.match(/^#{1,6}/)[0].length;
                     const title = heading.replace(/^#{1,6}\s+/, '');
                     const anchorLink = title.toLowerCase().replace(/\s+/g, '-');
-                    return `${''.repeat(level - 1)}-   [${title}](#${anchorLink})`;
+                    if (level === 2) {
+                        return `-   [${title}](#${anchorLink})`;
+                    } else if (level === 3) {
+                        return `    -   [${title}](#${anchorLink})`;
+                    }
+                    return '';
                 })
                 .join('\n');
             const lines = content.split('\n');
-            lines.splice(8, 0, tableOfContents);
+            lines.splice(3, 0, tableOfContents);
             content = lines.join('\n');
         }
 
@@ -342,7 +411,7 @@ class Generation {
         });
 
         // Swagger specification update
-        const swaggerPath = path.join(this.projectPath, 'swagger.yaml');
+        const swaggerPath = path.join(this.projectPath, 'docs/swagger.yaml');
         const swaggerReplacements = {
             SWAGGER_TITLE: this.answers.projectName,
             SWAGGER_DESCRIPTION: `This is '${this.answers.projectName}' project server based on the OpenAPI 3.0 specification.`,

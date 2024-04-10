@@ -2,7 +2,7 @@
     Data model for working with the articles object
 */
 
-<% if(database && databaseType === 'MongoDB') { -%>
+<% if(databaseType === 'MongoDB') { -%>
 import { Schema, model } from 'mongoose';
 
 const ArticleSchema = new Schema(
@@ -23,7 +23,7 @@ const Article = model('articles', ArticleSchema);
 
 export default Article;
 <% } -%>
-<% if(database && databaseType === 'PostgreSQL') { -%>
+<% if(databaseType === 'PostgreSQL') { -%>
 import { DataTypes } from 'sequelize';
 import db from '../services/index.js';
 

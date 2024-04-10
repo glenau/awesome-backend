@@ -72,23 +72,49 @@ async function run() {
             });
         }
 
+        // Checking PM2
+        if (answers.pm2Support) {
+            await new Promise((resolve, reject) => {
+                exec('pm2 -v', (err, stdout, stderr) => {
+                    if (err) {
+                        console.log(chalk.yellow.bold(`\n[WARNING] - Looks like you don't have PM2 installed`));
+                        warning = true;
+                    } else {
+                        console.log(chalk.cyan.bold(`\nPM2 detected - `) + chalk.green.bold(stdout.trim()));
+                    }
+                    resolve();
+                });
+            });
+        }
+
         // Starting the project generation process
         await new Generation(answers).start();
 
         if (!warning) {
             console.log(chalk.cyan.bold('Great! Open your project and start it with the command: '));
-            console.log(chalk.white.bold('- ') + chalk.green.bold('npm start\n'));
+            console.log(chalk.white.bold('- ') + chalk.green.bold('npm run start\n'));
         } else {
             console.log(chalk.yellow.bold('Before running the project, please address all warnings!\n'));
         }
 
-        console.log(chalk.cyan.bold('Documentation for your project can be found in the files:'));
+        console.log(chalk.cyan.bold('Documentation for your project can be found in the docs folder:'));
         console.log(
-            chalk.white.bold('- ') +
-                chalk.green.bold('README.md') +
-                chalk.white.bold(' (Instructions for installation and usage of the project)')
+            chalk.white.bold('- ') + chalk.green.bold('project.md') + chalk.white.bold(' (Technical documentation for the project)')
         );
-        console.log(chalk.white.bold('- ') + chalk.green.bold('docs.md') + chalk.white.bold(' (Technical documentation for the project)'));
+        if (answers.pm2Support) {
+            console.log(
+                chalk.white.bold('- ') +
+                    chalk.green.bold('pm2.md') +
+                    chalk.white.bold(' (Documentation for working with the PM2 package manager)')
+            );
+        }
+        if (answers.database) {
+            console.log(
+                chalk.white.bold('- ') +
+                    chalk.green.bold('database.md') +
+                    chalk.white.bold(' (Documentation for working with the database)')
+            );
+        }
         console.log(chalk.white.bold('- ') + chalk.green.bold('swagger.yaml') + chalk.white.bold(' (API Specification)'));
         console.log(chalk.magenta.bold('\nAt this point I say goodbye and wish you good luck!'));
     } catch (err) {

@@ -17,19 +17,13 @@ Before installing, [download and install Node.js](https://nodejs.org/en/download
     ```
 4.  Start the project
     ```sh
-    npm start
+    npm run start
     ```
 
 ## Usage
 
-For more examples, please refer to the [Documentation](docs.md).
+For more examples, please refer to the [Documentation](docs/project.md).
 
 ## Based
 
-This project was designed using the [awesome-backend](docs.md) NPM package.
-
-Gleb Naumov - glenaudev@gmail.com
-
-NPM package: https://www.npmjs.com/package/awesome-backend
-
-Source: https://github.com/glenau/awesome-backend
+This project was designed using the [awesome-backend](https://www.npmjs.com/package/awesome-backend) NPM package.

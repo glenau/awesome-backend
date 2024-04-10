@@ -86,6 +86,27 @@ class Questions {
                     ];
                 },
             },
+            {
+                type: 'list',
+                name: 'moreUtilities',
+                message: 'Would you like to select additional utilities?',
+                choices: [
+                    { name: 'Yes', value: true },
+                    { name: 'No', value: false },
+                ],
+            },
+            {
+                type: 'list',
+                name: 'pm2Support',
+                message: 'Do you want to add PM2 process manager support?',
+                when: function (answers) {
+                    return answers.moreUtilities;
+                },
+                choices: [
+                    { name: 'Yes', value: true },
+                    { name: 'No', value: false },
+                ],
+            },
         ];
     }
 

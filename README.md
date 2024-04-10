@@ -23,6 +23,10 @@ Before installing, [download and install Node.js](https://nodejs.org/en/download
 
 ## Changelog
 
+### Version 0.1.3
+
+-   Added a collection of requests for Postman
+
 ### Version 0.1.2
 
 -   Added optional questions

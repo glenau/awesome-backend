@@ -3,7 +3,7 @@
 */
 
 import Response from '../utils/response.js';
-<% if(database && databaseType === 'MongoDB') { -%>
+<% if(databaseType === 'MongoDB') { -%>
 import { Types } from 'mongoose';
 <% } -%>
 
@@ -23,7 +23,7 @@ function idValidator(req, res, next) {
             Response.failure(req, res, 'Parameter ID is missing', 400);
             return;
         }
-<% if(database && databaseType === 'MongoDB') { -%>
+<% if(databaseType === 'MongoDB') { -%>
         if (!Types.ObjectId.isValid(id)) {
             Response.failure(req, res, 'Invalid ID format', 400);
             return;

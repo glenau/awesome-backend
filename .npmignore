@@ -1,0 +1,7 @@
+.github/
+node_modules/
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
+LICENSE
+PULL_REQUEST_TEMPLATE.md
+SECURITY.md

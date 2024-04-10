@@ -93,6 +93,10 @@ async function run() {
         if (!warning) {
             console.log(chalk.cyan.bold('Great! Open your project and start it with the command: '));
             console.log(chalk.white.bold('- ') + chalk.green.bold('npm run start\n'));
+            if (answers.pm2Support) {
+                console.log(chalk.cyan.bold('You can also run the project through PM2 using the command: '));
+                console.log(chalk.white.bold('- ') + chalk.green.bold('npm run dev\n'));
+            }
         } else {
             console.log(chalk.yellow.bold('Before running the project, please address all warnings!\n'));
         }

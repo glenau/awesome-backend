@@ -325,26 +325,32 @@ class Generation {
         // ## Configuration
         content += `\n## Configuration\n`;
 
+        if (this.answers.webFramework === 'express') {
+            content += `\n### Server\n`;
+            content += `\n-   Server port: \`${this.answers.serverPort}\`\n`;
+            content += `\n-   API entry point: \`localhost:${this.answers.serverPort}/api\`\n`;
+        }
+
         if (this.answers.databaseType === 'MongoDB') {
             content += `\n### MongoDB\n`;
             content += `\n_You can find detailed information in the [Database documentation](database.md)._\n`;
+            content += `\n-   Database name: \`${this.answers.databaseName}\`\n`;
             content += `\n-   Collections:\n`;
             content += `    -   Articles\n`;
             content += `    -   Comments\n`;
             content += `    -   Profiles\n`;
-            content += `-   URL:\n`;
-            content += `    \`\`\`\n    mongodb://localhost:27017/${this.answers.databaseName}\n    \`\`\`\n`;
+            content += `-   URL: \`mongodb://localhost:27017/${this.answers.databaseName}\`\n`;
         }
 
         if (this.answers.databaseType === 'PostgreSQL') {
             content += `\n### PostgreSQL\n`;
             content += `\n_You can find detailed information in the [Database documentation](database.md)._\n`;
-            content += `\n-   Tables:\n`;
+            content += `\n-   Database name: \`${this.answers.databaseName}\`\n`;
+            content += `-   Tables:\n`;
             content += `    -   Articles\n`;
             content += `    -   Comments\n`;
             content += `    -   Profiles\n`;
-            content += `-   URL:\n`;
-            content += `    \`\`\`\n    postgres://localhost:5432/${this.answers.databaseName}\n    \`\`\`\n`;
+            content += `-   URL: \`postgres://localhost:5432/${this.answers.databaseName}\`\n`;
         }
 
         // ## API
@@ -354,19 +360,6 @@ class Generation {
         // ## Problems
         content += `\n## Problems\n`;
         content += `\n_If you have not found a solution to your problem, please write to me by [email](mailto:glenaudev@gmail.com)._\n`;
-
-        if (this.answers.database) {
-            content += `\n### The application cannot connect to the database\n`;
-            content += `\n-   Check if you have it installed ${this.answers.databaseType}\n`;
-            content += `-   Check if your ${this.answers.databaseType} is running\n`;
-            content += `-   Check if the database '${this.answers.databaseName}' has been created\n`;
-            if (this.answers.databaseType === 'MongoDB') {
-                content += `-   Check the path 'mongodb://localhost:27017/${this.answers.databaseName}' to the ${this.answers.databaseType}\n`;
-            }
-            if (this.answers.databaseType === 'PostgreSQL') {
-                content += `-   Check the path 'postgres://localhost:5432/${this.answers.databaseName}' to the ${this.answers.databaseType}\n`;
-            }
-        }
 
         // ## Contact
         content += `\n## Contact\n`;

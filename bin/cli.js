@@ -103,15 +103,8 @@ async function run() {
 
         console.log(chalk.cyan.bold('Documentation for your project can be found in the docs folder:'));
         console.log(
-            chalk.white.bold('- ') + chalk.green.bold('project.md') + chalk.white.bold(' (Technical documentation for the project)')
+            chalk.white.bold('- ') + chalk.green.bold('api.postman.json') + chalk.white.bold(' (Collection of requests for Postman)')
         );
-        if (answers.pm2Support) {
-            console.log(
-                chalk.white.bold('- ') +
-                    chalk.green.bold('pm2.md') +
-                    chalk.white.bold(' (Documentation for working with the PM2 package manager)')
-            );
-        }
         if (answers.database) {
             console.log(
                 chalk.white.bold('- ') +
@@ -119,6 +112,16 @@ async function run() {
                     chalk.white.bold(' (Documentation for working with the database)')
             );
         }
+        if (answers.pm2Support) {
+            console.log(
+                chalk.white.bold('- ') +
+                    chalk.green.bold('pm2.md') +
+                    chalk.white.bold(' (Documentation for working with the PM2 package manager)')
+            );
+        }
+        console.log(
+            chalk.white.bold('- ') + chalk.green.bold('project.md') + chalk.white.bold(' (Technical documentation for the project)')
+        );
         console.log(chalk.white.bold('- ') + chalk.green.bold('swagger.yaml') + chalk.white.bold(' (API Specification)'));
         console.log(chalk.magenta.bold('\nAt this point I say goodbye and wish you good luck!'));
     } catch (err) {

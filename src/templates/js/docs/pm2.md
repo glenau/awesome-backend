@@ -51,7 +51,7 @@ pm2 logs <%= projectName %>
 
 ## Help
 
-If you have any questions or issues, feel free to refer to the PM2 documentation: [PM2 Documentation](https://pm2.keymetrics.io/docs/).
+If you have any questions or issues, feel free to refer to the [Official PM2 Documentation](https://pm2.keymetrics.io/docs/).
 
 ## Contact
 

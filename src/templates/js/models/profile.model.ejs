@@ -2,7 +2,7 @@
     Data model for working with the profiles object
 */
 
-<% if(databaseType === 'MongoDB')  { -%>
+<% if(database && databaseType === 'MongoDB')  { -%>
 import { Schema, model } from 'mongoose';
 
 const ProfileSchema = new Schema(
@@ -19,7 +19,7 @@ const Profile = model('profiles', ProfileSchema);
 
 export default Profile;
 <% } -%>
-<% if(databaseType === 'PostgreSQL') { -%>
+<% if(database && databaseType === 'PostgreSQL') { -%>
 import { DataTypes } from 'sequelize';
 import db from '../services/index.js';
 

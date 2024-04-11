@@ -88,8 +88,8 @@ class Questions {
             },
             {
                 type: 'list',
-                name: 'moreUtilities',
-                message: 'Would you like to select additional utilities?',
+                name: 'moreOptions',
+                message: 'Want to choose additional options? (optional)',
                 choices: [
                     { name: 'Yes', value: true },
                     { name: 'No', value: false },
@@ -98,9 +98,21 @@ class Questions {
             {
                 type: 'list',
                 name: 'pm2Support',
-                message: 'Do you want to add PM2 process manager support?',
+                message: 'Want to add PM2 process manager support?',
                 when: function (answers) {
-                    return answers.moreUtilities;
+                    return answers.moreOptions;
+                },
+                choices: [
+                    { name: 'Yes', value: true },
+                    { name: 'No', value: false },
+                ],
+            },
+            {
+                type: 'list',
+                name: 'dockerSupport',
+                message: 'Want to add Docker support?',
+                when: function (answers) {
+                    return answers.moreOptions;
                 },
                 choices: [
                     { name: 'Yes', value: true },

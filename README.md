@@ -26,6 +26,7 @@ Before installing, [download and install Node.js](https://nodejs.org/en/download
 ### Version 0.1.3
 
 -   Added a collection of requests for Postman
+-   Added Docker support
 
 ### Version 0.1.2
 
@@ -51,6 +52,7 @@ Before installing, [download and install Node.js](https://nodejs.org/en/download
     -   [ ] [Koa](https://www.npmjs.com/package/koa)
 -   [ ] Tools
     -   [x] [PM2](https://www.npmjs.com/package/pm2)
+    -   [x] [Docker](https://www.docker.com/)
     -   [ ] [TypeScript](https://www.npmjs.com/package/typescript)
     -   [ ] [WebSockets](https://www.npmjs.com/package/ws)
     -   [ ] [Redis](https://www.npmjs.com/package/redis)

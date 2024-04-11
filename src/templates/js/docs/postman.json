@@ -1,0 +1,224 @@
+{
+    "info": {
+        "name": "<%= projectName %>",
+        "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Articles",
+            "item": [
+                {
+                    "name": "localhost:<%= serverPort %>/api/articles",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": "localhost:<%= serverPort %>/api/articles"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "localhost:<%= serverPort %>/api/articles/",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": "localhost:<%= serverPort %>/api/articles/"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "localhost:<%= serverPort %>/api/articles/",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\":\"Awesome article\",\n    \"body\":\"This is an awesome article\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": "localhost:<%= serverPort %>/api/articles/"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "localhost:<%= serverPort %>/api/articles/",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": "localhost:<%= serverPort %>/api/articles/"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "localhost:<%= serverPort %>/api/articles/",
+                    "request": {
+                        "method": "PUT",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\":\"Awesome article NEW\",\n    \"body\":\"This is an awesome article NEW\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": "localhost:<%= serverPort %>/api/articles/"
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Comments",
+            "item": [
+                {
+                    "name": "localhost:<%= serverPort %>/api/comments",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": "localhost:<%= serverPort %>/api/comments"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "localhost:<%= serverPort %>/api/comments/",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": "localhost:<%= serverPort %>/api/comments/"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "localhost:<%= serverPort %>/api/comments/",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"body\":\"This is an awesome comment\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": "localhost:<%= serverPort %>/api/comments/"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "localhost:<%= serverPort %>/api/comments/",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": "localhost:<%= serverPort %>/api/comments/"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "localhost:<%= serverPort %>/api/comments/",
+                    "request": {
+                        "method": "PUT",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"body\":\"This is an awesome comment NEW\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": "localhost:<%= serverPort %>/api/comments/"
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Profiles",
+            "item": [
+                {
+                    "name": "localhost:<%= serverPort %>/api/profiles",
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": "localhost:<%= serverPort %>/api/profiles"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "localhost:<%= serverPort %>/api/profiles/",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": "localhost:<%= serverPort %>/api/profiles/"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "localhost:<%= serverPort %>/api/profiles/",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\":\"John Doe\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": "localhost:<%= serverPort %>/api/profiles/"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "localhost:<%= serverPort %>/api/profiles/",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": "localhost:<%= serverPort %>/api/profiles/"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "localhost:<%= serverPort %>/api/profiles/",
+                    "request": {
+                        "method": "PUT",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\":\"John Doe NEW\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": "localhost:<%= serverPort %>/api/profiles/"
+                    },
+                    "response": []
+                }
+            ]
+        }
+    ]
+}

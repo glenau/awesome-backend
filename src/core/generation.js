@@ -52,16 +52,30 @@ class Generation {
         if (!this.answers.database) {
             files['middlewares/database.middleware.ejs'] = true;
             files['services/index.ejs'] = true;
-            files['docs/database.md'] = true;
+            files['docs/mongoDB.md'] = true;
+            files['docs/postgreSQL.md'] = true;
         } else {
             files['validators/article.validator.ejs'] = true;
             files['validators/comment.validator.ejs'] = true;
             files['validators/profile.validator.ejs'] = true;
+
+            if (this.answers.databaseType === 'MongoDB') {
+                files['docs/postgreSQL.md'] = true;
+            }
+
+            if (this.answers.databaseType === 'PostgreSQL') {
+                files['docs/mongoDB.md'] = true;
+            }
         }
 
         if (!this.answers.pm2Support) {
             files['docs/pm2.md'] = true;
             files['ecosystem.config.ejs'] = true;
+        }
+
+        if (!this.answers.dockerSupport) {
+            files['docs/docker.md'] = true;
+            files['Dockerfile'] = true;
         }
 
         return files;
@@ -72,11 +86,11 @@ class Generation {
         const dependencies = ['dotenv', 'helmet', 'pino', 'pino-pretty', 'uuid'];
         dependencies.push(this.answers.webFramework);
 
-        if (this.answers.databaseType === 'MongoDB') {
+        if (this.answers.database && this.answers.databaseType === 'MongoDB') {
             dependencies.push('mongoose');
         }
 
-        if (this.answers.databaseType === 'PostgreSQL') {
+        if (this.answers.database && this.answers.databaseType === 'PostgreSQL') {
             dependencies.push('sequelize');
             dependencies.push('pg');
         }
@@ -126,8 +140,17 @@ class Generation {
             },
         };
 
-        if (this.answers.pm2Support) {
-            packageData.scripts.dev = 'pm2 start ecosystem.config.cjs --watch';
+        if (this.answers.moreOptions) {
+            if (this.answers.pm2Support) {
+                packageData.scripts.dev = 'pm2 start ecosystem.config.cjs --watch';
+            }
+
+            if (this.answers.dockerSupport) {
+                packageData.scripts['docker:build'] = `docker build -t ${this.answers.projectName} .`;
+                packageData.scripts[
+                    'docker:run'
+                ] = `docker run -p ${this.answers.serverPort}:${this.answers.serverPort} ${this.answers.projectName}`;
+            }
         }
 
         fs.writeFileSync(packagePath, JSON.stringify(packageData, null, 4), 'utf8');
@@ -186,9 +209,6 @@ class Generation {
                 if (err) {
                     console.error(chalk.red.bold(`Error installing dependencies: ${err.message}\n`));
                     reject(err);
-                } else if (stderr) {
-                    console.error(chalk.red.bold(`Error installing dependencies: ${stderr}\n`));
-                    reject(new err(stderr));
                 } else {
                     process.stdout.write(chalk.green.bold('OK\n'));
                     resolve();
@@ -216,21 +236,34 @@ class Generation {
         docs: Project documentation
         `;
 
-        if (this.answers.database) {
+        if (this.answers.dockerSupport) {
             struct += `
-            -   database.md: Database Documentation
+            -   docker.md: Docker documentation
+            `;
+        }
+
+        if (this.answers.databaseType === 'MongoDB') {
+            struct += `
+            -   mongoDB.md: MongoDB documentation
             `;
         }
 
         if (this.answers.pm2Support) {
             struct += `
-            -   pm2.md: Process Manager Documentation
+            -   pm2.md: Process Manager documentation
+            `;
+        }
+
+        if (this.answers.databaseType === 'PostgreSQL') {
+            struct += `
+            -   postgreSQL.md: PostgreSQL documentation
             `;
         }
 
         struct += `
-        -   project.md: General documentation
+        -   postman.json: Postman requests collection
         -   swagger.yaml: API specification
+        -   ${this.answers.projectName}.md: General project documentation
         middlewares: Directory for middleware files
         `;
 
@@ -291,14 +324,25 @@ class Generation {
         .env: File for storing environment variables
         .env.example: Example file for storing environment variables
         .gitignore: Git configuration file for ignoring specified files
-        ecosystem.config.cjs: PM2 configuration file
+        `;
+
+        if (this.answers.dockerSupport) {
+            struct += `
+            Dockerfile: Docker configuration file
+            `;
+        }
+
+        if (this.answers.pm2Support) {
+            struct += `
+            ecosystem.config.cjs: PM2 configuration file
+            `;
+        }
+
+        struct += `
         index.js: Main application file
         package-lock.json: File containing locked dependencies versions
         package.json: Project configuration file in JSON format
         README.md: Instructions for installation and usage of the project
-        `;
-
-        struct += `
         \`\`\`
         `;
 
@@ -326,36 +370,54 @@ class Generation {
         content += `\n## Configuration\n`;
 
         if (this.answers.webFramework === 'express') {
-            content += `\n### Server\n`;
+            content += `\n### Express\n`;
             content += `\n-   Server port: \`${this.answers.serverPort}\`\n`;
-            content += `\n-   API entry point: \`localhost:${this.answers.serverPort}/api\`\n`;
+            content += `-   API entry point: \`localhost:${this.answers.serverPort}/api\`\n`;
+            content += `\n_You can find detailed information in the [Express package](https://www.npmjs.com/package/express)._\n`;
         }
 
         if (this.answers.databaseType === 'MongoDB') {
             content += `\n### MongoDB\n`;
-            content += `\n_You can find detailed information in the [Database documentation](database.md)._\n`;
             content += `\n-   Database name: \`${this.answers.databaseName}\`\n`;
-            content += `\n-   Collections:\n`;
+            content += `-   Collections:\n`;
             content += `    -   Articles\n`;
             content += `    -   Comments\n`;
             content += `    -   Profiles\n`;
             content += `-   URL: \`mongodb://localhost:27017/${this.answers.databaseName}\`\n`;
+            content += `\n_You can find detailed information in the [MongoDB documentation](mongoDB.md)._\n`;
         }
 
         if (this.answers.databaseType === 'PostgreSQL') {
             content += `\n### PostgreSQL\n`;
-            content += `\n_You can find detailed information in the [Database documentation](database.md)._\n`;
             content += `\n-   Database name: \`${this.answers.databaseName}\`\n`;
             content += `-   Tables:\n`;
             content += `    -   Articles\n`;
             content += `    -   Comments\n`;
             content += `    -   Profiles\n`;
             content += `-   URL: \`postgres://localhost:5432/${this.answers.databaseName}\`\n`;
+            content += `\n_You can find detailed information in the [PostgreSQL documentation](postgreSQL.md)._\n`;
+        }
+
+        if (this.answers.pm2Support) {
+            content += `\n### PM2\n`;
+            content += `\n-   Start your application:`;
+            content += `\n    \`\`\`bash\n    npm run dev\n    \`\`\`\n`;
+            content += `\n_You can find detailed information in the [PM2 documentation](pm2.md)._\n`;
+        }
+
+        if (this.answers.dockerSupport) {
+            content += `\n### Docker\n`;
+            content += `\n1.  Build your application:\n`;
+            content += `\n    \`\`\`bash\n    npm run docker:build\n    \`\`\`\n`;
+            content += `\n2.  Run your application:\n`;
+            content += `\n    \`\`\`bash\n    npm run docker:run\n    \`\`\`\n`;
+            content += `\n_You can find detailed information in the [Docker documentation](docker.md)._\n`;
         }
 
         // ## API
         content += `\n## API\n`;
-        content += `\n_For more examples, please refer to the [API documentation](swagger.yaml)._\n`;
+        content += `\n-   [Swagger API documentation](swagger.yaml)\n`;
+        content += `\n-   [Postman collection](postman.json)\n`;
 
         // ## Problems
         content += `\n## Problems\n`;
@@ -388,7 +450,7 @@ class Generation {
             content = lines.join('\n');
         }
 
-        // Update docs.md
+        // Update project.md and rename file
         fs.readFile(docsPath, 'utf8', (err, data) => {
             if (err) {
                 return;
@@ -400,6 +462,13 @@ class Generation {
                 if (err) {
                     return;
                 }
+
+                const newFilePath = path.join(path.dirname(docsPath), `${this.answers.projectName}.md`);
+                fs.rename(docsPath, newFilePath, (err) => {
+                    if (err) {
+                        return;
+                    }
+                });
             });
         });
 

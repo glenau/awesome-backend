@@ -7,11 +7,11 @@ import Comment from '../models/comment.model.js';
 
 class CommentService {
     async createComment(data) {
-<% if(databaseType === 'MongoDB') { -%>
+<% if(database && databaseType === 'MongoDB') { -%>
         const comment = new Comment(data);
         return await comment.save();
 <% } -%>
-<% if(databaseType === 'PostgreSQL') { -%>
+<% if(database && databaseType === 'PostgreSQL') { -%>
         const comment = Comment.build(data);
         return await comment.save();
 <% } -%>
@@ -22,10 +22,10 @@ class CommentService {
     }
 
     async findComments() {
-<% if(databaseType === 'MongoDB') { -%>
+<% if(database && databaseType === 'MongoDB') { -%>
         return await Comment.find();
 <% } -%>
-<% if(databaseType === 'PostgreSQL') { -%>
+<% if(database && databaseType === 'PostgreSQL') { -%>
         return await Comment.findAll();
 <% } -%>
 <% if(!database) { -%>
@@ -34,10 +34,10 @@ class CommentService {
     }
 
     async findCommentByID(id) {
-<% if(databaseType === 'MongoDB') { -%>
+<% if(database && databaseType === 'MongoDB') { -%>
         return await Comment.findById(id);
 <% } -%>
-<% if(databaseType === 'PostgreSQL') { -%>
+<% if(database && databaseType === 'PostgreSQL') { -%>
         return await Comment.findByPk(id);
 <% } -%>
 <% if(!database) { -%>
@@ -46,10 +46,10 @@ class CommentService {
     }
 
     async updateCommentByID(id, data) {
-<% if(databaseType === 'MongoDB') { -%>
+<% if(database && databaseType === 'MongoDB') { -%>
         return await Comment.findByIdAndUpdate(id, data, { new: true });
 <% } -%>
-<% if(databaseType === 'PostgreSQL') { -%>
+<% if(database && databaseType === 'PostgreSQL') { -%>
         const comment = await Comment.findByPk(id);
         return await comment.update(data);
 <% } -%>
@@ -60,10 +60,10 @@ class CommentService {
     }
 
     async deleteCommentByID(id) {
-<% if(databaseType === 'MongoDB') { -%>
+<% if(database && databaseType === 'MongoDB') { -%>
         return await Comment.findByIdAndDelete(id);
 <% } -%>
-<% if(databaseType === 'PostgreSQL') { -%>
+<% if(database && databaseType === 'PostgreSQL') { -%>
         const comment = await Comment.findByPk(id);
         await comment.destroy();
         return comment;

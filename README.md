@@ -23,6 +23,10 @@ Before installing, [download and install Node.js](https://nodejs.org/en/download
 
 ## Changelog
 
+### Version 0.1.4
+
+-   Added automatic publishing of packages to the NPM registry
+
 ### Version 0.1.3
 
 -   Added a collection of requests for Postman
@@ -33,13 +37,6 @@ Before installing, [download and install Node.js](https://nodejs.org/en/download
 -   Added optional questions
 -   Added PM2 support
 -   Added extended documentation
-
-### Version 0.1.1
-
--   Added documentation generation
--   Added PostgreSQL support
--   Added support for working without a database
--   Added query validators
 
 ## Roadmap
 

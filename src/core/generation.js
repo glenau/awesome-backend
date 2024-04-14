@@ -85,6 +85,10 @@ class Generation {
             files['Dockerfile'] = true;
         }
 
+        if (!this.answers.compressionSupport) {
+            files['middlewares/compression.middleware.ejs'] = true;
+        }
+
         return files;
     }
 
@@ -100,6 +104,10 @@ class Generation {
         if (this.answers.database && this.answers.databaseType === 'PostgreSQL') {
             dependencies.push('sequelize');
             dependencies.push('pg');
+        }
+
+        if (this.answers.moreOptions && this.answers.compressionSupport && this.answers.webFramework === 'express') {
+            dependencies.push('compression');
         }
         return dependencies;
     }
@@ -273,6 +281,12 @@ class Generation {
         -   ${this.answers.projectName}.md: General project documentation
         middlewares: Directory for middleware files
         `;
+
+        if (this.answers.compressionSupport) {
+            struct += `
+            -   compression.middleware.js: Middleware for data compression
+            `;
+        }
 
         if (this.answers.database) {
             struct += `

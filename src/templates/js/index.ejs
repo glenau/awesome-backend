@@ -20,6 +20,9 @@ const serverPort = env.serverPort;
 <% if(database) { -%>
 middlewares.setupDatabase(); // Setup database connection
 <% } -%>
+<% if (moreOptions && compressionSupport && webFramework === 'express') { -%>
+middlewares.setupCompression(app); // Setting data compression
+<% } -%>
 middlewares.setupSecurityHeaders(app); // Setup security headers
 middlewares.setupJsonParser(app); // Setup JSON body parser
 middlewares.setupUrlEncodedParser(app); // Setup URL encoded body parser

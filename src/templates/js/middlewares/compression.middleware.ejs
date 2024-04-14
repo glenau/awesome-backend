@@ -1,0 +1,14 @@
+/*
+    Middleware for data compression
+*/
+
+<% if (moreOptions && compressionSupport && webFramework === 'express') { -%>
+import compression from 'compression';
+
+// Use compression for all HTTP responses
+function setupCompression(app) {
+    app.use(compression());
+}
+
+export default setupCompression;
+<% } -%>

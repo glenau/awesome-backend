@@ -124,6 +124,18 @@ class Questions {
                     { name: 'No', value: false },
                 ],
             },
+            {
+                type: 'list',
+                name: 'compressionSupport',
+                message: 'Want to add data compression capabilities?',
+                when: function (answers) {
+                    return answers.moreOptions && answers.webFramework === 'express';
+                },
+                choices: [
+                    { name: 'Yes', value: true },
+                    { name: 'No', value: false },
+                ],
+            },
         ];
     }
 

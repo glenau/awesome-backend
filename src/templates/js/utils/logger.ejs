@@ -4,13 +4,14 @@
 
 import pino from 'pino';
 
+// Creating a logger instance using Pino with specific configuration options
 const logger = pino({
     transport: {
-        target: 'pino-pretty',
+        target: 'pino-pretty', // Using pino-pretty for prettifying logs
         options: {
-            colorize: true,
-            translateTime: 'SYS:standard',
-            ignore: 'hostname,pid',
+            colorize: true, // Enabling colorization for better readability
+            translateTime: 'SYS:standard', // Translating time to a standard format
+            ignore: 'hostname,pid', // Ignoring hostname and process ID in logs
         },
     },
 });

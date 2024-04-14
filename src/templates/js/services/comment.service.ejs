@@ -5,7 +5,9 @@
 
 import Comment from '../models/comment.model.js';
 
+// Class responsible for interacting with the comment collection in the database
 class CommentService {
+    // Method for creating a new comment in the database
     async createComment(data) {
 <% if(database && databaseType === 'MongoDB') { -%>
         const comment = new Comment(data);
@@ -21,6 +23,7 @@ class CommentService {
 <% } -%>
     }
 
+    // Method for finding all comments in the database
     async findComments() {
 <% if(database && databaseType === 'MongoDB') { -%>
         return await Comment.find();
@@ -33,6 +36,7 @@ class CommentService {
 <% } -%>
     }
 
+    // Method for finding an comment by its ID in the database
     async findCommentByID(id) {
 <% if(database && databaseType === 'MongoDB') { -%>
         return await Comment.findById(id);
@@ -45,6 +49,7 @@ class CommentService {
 <% } -%>
     }
 
+    // Method for updating an comment by its ID in the database
     async updateCommentByID(id, data) {
 <% if(database && databaseType === 'MongoDB') { -%>
         return await Comment.findByIdAndUpdate(id, data, { new: true });
@@ -59,6 +64,7 @@ class CommentService {
 <% } -%>
     }
 
+    // Method for deleting an comment by its ID from the database
     async deleteCommentByID(id) {
 <% if(database && databaseType === 'MongoDB') { -%>
         return await Comment.findByIdAndDelete(id);
@@ -75,4 +81,5 @@ class CommentService {
     }
 }
 
+// Export an instance of the comment service for use in other modules
 export default new CommentService();

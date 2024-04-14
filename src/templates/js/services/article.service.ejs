@@ -5,7 +5,9 @@
 
 import Article from '../models/article.model.js';
 
+// Class responsible for interacting with the article collection in the database
 class ArticleService {
+    // Method for creating a new article in the database
     async createArticle(data) {
 <% if(database && databaseType === 'MongoDB') { -%>
         const article = new Article(data);
@@ -21,6 +23,7 @@ class ArticleService {
 <% } -%>
     }
 
+    // Method for finding all articles in the database
     async findArticles() {
 <% if(database && databaseType === 'MongoDB') { -%>
         return await Article.find();
@@ -33,6 +36,7 @@ class ArticleService {
 <% } -%>
     }
 
+    // Method for finding an article by its ID in the database
     async findArticleByID(id) {
 <% if(database && databaseType === 'MongoDB') { -%>
         return await Article.findById(id);
@@ -45,6 +49,7 @@ class ArticleService {
 <% } -%>
     }
 
+    // Method for updating an article by its ID in the database
     async updateArticleByID(id, data) {
 <% if(database && databaseType === 'MongoDB') { -%>
         return await Article.findByIdAndUpdate(id, data, { new: true });
@@ -59,6 +64,7 @@ class ArticleService {
 <% } -%>
     }
 
+    // Method for deleting an article by its ID from the database
     async deleteArticleByID(id) {
 <% if(database && databaseType === 'MongoDB') { -%>
         return await Article.findByIdAndDelete(id);
@@ -75,4 +81,5 @@ class ArticleService {
     }
 }
 
+// Export an instance of the article service for use in other modules
 export default new ArticleService();

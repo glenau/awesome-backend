@@ -6,51 +6,63 @@
 import CommentService from '../services/comment.service.js';
 import Response from '../utils/response.js';
 
+// Controller class for handling comment-related operations
 class CommentController {
+    // Method to create a new comment
     async createComment(req, res, next) {;
         try {
             const comment = await CommentService.createComment(req.body);
             Response.success(req, res, comment);
         } catch (err) {
+            // Pass any errors to the error handling middleware
             next(err);
         }
     }
 
+    // Method to get all comments
     async getComments(req, res, next) {;
         try {
             const comments = await CommentService.findComments();
             Response.success(req, res, comments);
         } catch (err) {
+            // Pass any errors to the error handling middleware
             next(err);
         }
     }
 
+    // Method to get an comment by its ID
     async getCommentByID(req, res, next) {;
         try {
             const comment = await CommentService.findCommentByID(req.params.id);
             Response.success(req, res, comment);
         } catch (err) {
+            // Pass any errors to the error handling middleware
             next(err);
         }
     }
 
+    // Method to update an comment
     async updateComment(req, res, next) {;
         try {
             const comment = await CommentService.updateCommentByID(req.params.id, req.body);
             Response.success(req, res, comment);
         } catch (err) {
+            // Pass any errors to the error handling middleware
             next(err);
         }
     }
 
+    // Method to delete an comment
     async deleteComment(req, res, next) {;
         try {
             const result = await CommentService.deleteCommentByID(req.params.id);
             Response.success(req, res, result);
         } catch (err) {
+            // Pass any errors to the error handling middleware
             next(err);
         }
     }
 }
 
+// Export an instance of the CommentController class
 export default new CommentController();

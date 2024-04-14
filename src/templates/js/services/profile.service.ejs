@@ -5,7 +5,9 @@
 
 import Profile from '../models/profile.model.js';
 
+// Class responsible for interacting with the profile collection in the database
 class ProfileService {
+    // Method for creating a new profile in the database
     async createProfile(data) {
 <% if(database && databaseType === 'MongoDB') { -%>
         const profile = new Profile(data);
@@ -21,6 +23,7 @@ class ProfileService {
 <% } -%>
     }
 
+    // Method for finding all profiles in the database
     async findProfiles() {
 <% if(database && databaseType === 'MongoDB') { -%>
         return await Profile.find();
@@ -33,6 +36,7 @@ class ProfileService {
 <% } -%>
     }
 
+    // Method for finding an profile by its ID in the database
     async findProfileByID(id) {
 <% if(database && databaseType === 'MongoDB') { -%>
         return await Profile.findById(id);
@@ -45,6 +49,7 @@ class ProfileService {
 <% } -%>
     }
 
+    // Method for updating an profile by its ID in the database
     async updateProfileByID(id, data) {
 <% if(database && databaseType === 'MongoDB') { -%>
         return await Profile.findByIdAndUpdate(id, data, { new: true });
@@ -59,6 +64,7 @@ class ProfileService {
 <% } -%>
     }
 
+    // Method for deleting an profile by its ID from the database
     async deleteProfileByID(id) {
 <% if(database && databaseType === 'MongoDB') { -%>
         return await Profile.findByIdAndDelete(id);
@@ -75,4 +81,5 @@ class ProfileService {
     }
 }
 
+// Export an instance of the profile service for use in other modules
 export default new ProfileService();

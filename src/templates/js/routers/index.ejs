@@ -8,11 +8,14 @@ import articlesRouters from './articles.routers.js';
 import commentsRouters from './comments.routers.js';
 import profilesRouters from './profiles.routers.js';
 
+// Create a new instance of Router
 const router = Router();
 
-router.use('/articles', articlesRouters);
-router.use('/comments', commentsRouters);
-router.use('/profiles', profilesRouters);
+// Define routes and their corresponding routes
+router.use('/articles', articlesRouters); // Mount the articles router under the '/articles' path
+router.use('/comments', commentsRouters); // Mount the comments router under the '/comments' path
+router.use('/profiles', profilesRouters); // Mount the profiles router under the '/profiles' path
 
+// Export the router for use in other modules
 export default router;
 <% } -%>

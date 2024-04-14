@@ -6,51 +6,63 @@
 import ArticleService from '../services/article.service.js';
 import Response from '../utils/response.js';
 
+// Controller class for handling article-related operations
 class ArticleController {
+    // Method to create a new article
     async createArticle(req, res, next) {;
         try {
             const article = await ArticleService.createArticle(req.body);
             Response.success(req, res, article);
         } catch (err) {
+            // Pass any errors to the error handling middleware
             next(err);
         }
     }
 
+    // Method to get all articles
     async getArticles(req, res, next) {;
         try {
             const articles = await ArticleService.findArticles();
             Response.success(req, res, articles);
         } catch (err) {
+            // Pass any errors to the error handling middleware
             next(err);
         }
     }
 
+    // Method to get an article by its ID
     async getArticleByID(req, res, next) {;
         try {
             const article = await ArticleService.findArticleByID(req.params.id);
             Response.success(req, res, article);
         } catch (err) {
+            // Pass any errors to the error handling middleware
             next(err);
         }
     }
 
+    // Method to update an article
     async updateArticle(req, res, next) {;
         try {
             const article = await ArticleService.updateArticleByID(req.params.id, req.body);
             Response.success(req, res, article);
         } catch (err) {
+            // Pass any errors to the error handling middleware
             next(err);
         }
     }
 
+    // Method to delete an article
     async deleteArticle(req, res, next) {;
         try {
             const result = await ArticleService.deleteArticleByID(req.params.id);
             Response.success(req, res, result);
         } catch (err) {
+            // Pass any errors to the error handling middleware
             next(err);
         }
     }
 }
 
+// Export an instance of the ArticleController class
 export default new ArticleController();

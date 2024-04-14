@@ -4,20 +4,25 @@
 
 import Response from '../utils/response.js';
 
+// Middleware function to validate article creation request
 function createArticleValidator(req, res, next) {
+    // Extract the title from the request body
     const title = req.body.title;
     if (!title) {
         Response.failure(req, res, 'Parameter title is missing', 400);
         return;
     }
 
+    // Extract the body from the request body
     const body = req.body.body;
     if (!body) {
         Response.failure(req, res, 'Parameter body is missing', 400);
         return;
     }
 
+    // If both title and body are present, proceed to the next middleware
     next();
 }
 
+// Export the createArticleValidator middleware function
 export { createArticleValidator }

@@ -8,41 +8,58 @@ import logger from '../utils/logger.js';
 import pg from 'pg';  
 <% } -%>
 
+// Function to set up database connection
 async function setupDatabase() {
 <% if(database && databaseType === 'MongoDB') { -%>
     try {
+        // Attempt to connect to the MongoDB database using Mongoose
         await db.mongoose.connect(db.url, {});
         logger.info(`Database connected - ${db.url}`);
     } catch (err) {
+        // Log any errors that occur during database connection
         logger.error(err, 'Failed to connect to the MongoDB');
         process.exit(1);
     }
 <% } -%>
 <% if(database && databaseType === 'PostgreSQL') { -%>
     try {
+        // Determine the host based on whether the application is running in a Docker container
         const host = process.env.DOCKER ? 'host.docker.internal' : 'localhost';
+
+        // Create a new PostgreSQL client instance
         const client = new pg.Client({
             host: host,
             database: 'postgres',
             user: db.user,
             port: 5432,
         });
+
+        // Connect to the PostgreSQL server
         await client.connect();
+        
+        // Check if the specified database exists
         const result = await client.query(`SELECT FROM pg_database WHERE datname = '<%= databaseName %>';`);
 
+        // If the specified database does not exist, create it
         if (result.rows.length === 0) {
             await client.query('CREATE DATABASE <%= databaseName%>;');
         }
+
+        // Close the connection to the PostgreSQL server
         await client.end();
     } catch (err) {
+        // Log any errors that occur during database creation or validation
         logger.error(err, 'Error creating or checking PostgreSQL');
         process.exit(1);
     } finally {
         try {
+            // Authenticate with the Sequelize ORM
             await db.sequelize.authenticate();
+            // Sync the Sequelize models with the database schema
             await db.sequelize.sync();
             logger.info(`Database connected - ${db.url}`);
         } catch (err) {
+            // Log any errors that occur during database connection
             logger.error(err, 'Failed to connect to the PostgreSQL');
             process.exit(1);
         }

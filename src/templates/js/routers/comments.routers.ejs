@@ -11,13 +11,16 @@ import { idValidator } from '../validators/validator.js';
 import { createCommentValidator } from '../validators/comment.validator.js';
 <% } -%>
 
+// Create a new instance of Router
 const router = Router();
 
-router.post('/',<% if(!database) { -%> createCommentValidator,<% } -%>  CommentController.createComment);
-router.get('/', CommentController.getComments);
-router.get('/:id', idValidator, CommentController.getCommentByID);
-router.put('/:id', idValidator, CommentController.updateComment);
-router.delete('/:id', idValidator, CommentController.deleteComment);
+// Define routes and their corresponding controller methods
+router.post('/',<% if(!database) { -%> createCommentValidator,<% } -%>  CommentController.createComment); // Route for creating a new comment
+router.get('/', CommentController.getComments); // Route for retrieving all comments
+router.get('/:id', idValidator, CommentController.getCommentByID); // Route for retrieving an comment by ID
+router.put('/:id', idValidator, CommentController.updateComment); // Route for updating an comment by ID
+router.delete('/:id', idValidator, CommentController.deleteComment); // Route for deleting an comment by ID
 
+// Export the router for use in other modules
 export default router;
 <% } -%>

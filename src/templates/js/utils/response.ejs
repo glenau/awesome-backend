@@ -6,6 +6,7 @@
 import logger from './logger.js';
 
 class Response {
+    // Sends a success response with data to the client
     success(req, res, data, code = 200) {
         const result = {
             status: true,
@@ -17,6 +18,7 @@ class Response {
         logger.info({ result }, `[OUT] [ID:${req.id}] [METHOD:${req.method}] [URL:${req.originalUrl}]`);
     }
 
+    // Sends a failure response with an error message to the client
     failure(req, res, data, code = 200, err = null) {
         const message = data;
 
@@ -28,11 +30,13 @@ class Response {
         res.status(code).json(result);
 
         if (err) {
+            // Logging error response with error details
             logger.error(
                 { result, err },
                 `[OUT] [ID:${req.id}] [METHOD:${req.method}] [URL:${req.originalUrl}]`,
             );
         } else {
+            // Logging failure response
             logger.info(
                 { result },
                 `[OUT] [ID:${req.id}] [METHOD:${req.method}] [URL:${req.originalUrl}]`,

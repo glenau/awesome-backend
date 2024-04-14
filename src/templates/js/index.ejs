@@ -10,23 +10,29 @@ import middlewares from './middlewares/index.js';
 import logger from './utils/logger.js';
     
 <% if(webFramework === 'express') { -%>
+// Create an Express application instance
 const app = express();
 <% } -%>
+// Get the server port from the environment configuration
 const serverPort = env.serverPort;
 
 // Setup middlewares
 <% if(database) { -%>
-middlewares.setupDatabase();
+middlewares.setupDatabase(); // Setup database connection
 <% } -%>
-middlewares.setupSecurityHeaders(app);
-middlewares.setupJsonParser(app);
-middlewares.setupUrlEncodedParser(app);
-middlewares.setupRequestID(app);
-middlewares.setupRouters(app);
-middlewares.setupNotFound(app);
-middlewares.setupError(app);
+middlewares.setupSecurityHeaders(app); // Setup security headers
+middlewares.setupJsonParser(app); // Setup JSON body parser
+middlewares.setupUrlEncodedParser(app); // Setup URL encoded body parser
+middlewares.setupRequestID(app); // Setup request ID generation
+middlewares.setupRouters(app); // Setup application routers
+middlewares.setupNotFound(app); // Setup 404 Not Found handler
+middlewares.setupError(app); // Setup error handler
 
 // Start the server and listen on the specified port
-app.listen(serverPort, () => {
-    logger.info(`The server is started at the URL - localhost:${serverPort}`);
+app.listen(serverPort, (err) => {
+    if (err) {
+        logger.error(err, 'Error starting the server');
+        process.exit(1);
+    }
+  logger.info(`Server is running at URL - localhost:${serverPort}`);
 });

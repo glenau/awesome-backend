@@ -23,6 +23,10 @@ Before installing, [download and install Node.js](https://nodejs.org/en/download
 
 ## Changelog
 
+### Version 0.1.5
+
+-   Added extended comments
+
 ### Version 0.1.4
 
 -   Added automatic publishing of packages to the NPM registry
@@ -31,12 +35,6 @@ Before installing, [download and install Node.js](https://nodejs.org/en/download
 
 -   Added a collection of requests for Postman
 -   Added Docker support
-
-### Version 0.1.2
-
--   Added optional questions
--   Added PM2 support
--   Added extended documentation
 
 ## Roadmap
 

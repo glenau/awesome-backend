@@ -1,3 +1,5 @@
+# <%= projectName %>
+
 Documentation for the '<%= projectName %>' project.
 
 ```

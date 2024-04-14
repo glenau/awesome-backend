@@ -7,15 +7,19 @@ import Response from '../utils/response.js';
 import { Types } from 'mongoose';
 <% } -%>
 
+// Middleware function to validate request body presence
 function bodyValidator(req, res, next) {
+    // Check if the request method is POST or PUT and request body is empty
     if ((req.method === 'POST' || req.method === 'PUT') && Object.keys(req.body).length === 0) {
         Response.failure(req, res, 'Request body is missing', 400);
         return;
     }
 
+    // If request body is present or method is not POST or PUT, proceed to the next middleware
     next();
 }
 
+// Middleware function to validate ID parameter
 function idValidator(req, res, next) {
     if(req.method !== 'POST') {
         const id = req.params.id;
@@ -24,6 +28,7 @@ function idValidator(req, res, next) {
             return;
         }
 <% if(database && databaseType === 'MongoDB') { -%>
+        // Check if the ID is in a valid ObjectId format for MongoDB
         if (!Types.ObjectId.isValid(id)) {
             Response.failure(req, res, 'Invalid ID format', 400);
             return;
@@ -31,7 +36,9 @@ function idValidator(req, res, next) {
 <% } -%>
     }
     
+    // If ID is present and valid or method is POST, proceed to the next middleware
     next();
 }
 
+// Export the bodyValidator and idValidator middleware functions
 export { bodyValidator, idValidator };

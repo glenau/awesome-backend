@@ -5,6 +5,7 @@
 <% if(database && databaseType === 'MongoDB') { -%>
 import { Schema, model } from 'mongoose';
 
+// Define the schema for the Comment model
 const CommentSchema = new Schema(
     {
         body: {
@@ -15,14 +16,17 @@ const CommentSchema = new Schema(
     { versionKey: false, timestamps: true }
 );
 
+// Create the Comment model using the defined schema
 const Comment = model('comments', CommentSchema);
 
+// Export the Comment model
 export default Comment;
 <% } -%>
 <% if(database && databaseType === 'PostgreSQL') { -%>
 import { DataTypes } from 'sequelize';
 import db from '../services/index.js';
 
+// Defining the Comment model using Sequelize's define method
 const Comment = db.sequelize.define('comments', {
     body: {
         type: DataTypes.TEXT,
@@ -30,11 +34,13 @@ const Comment = db.sequelize.define('comments', {
     },
 });
 
+// Export the Comment model
 export default Comment;
 <% } -%>
 <% if(!database) { -%>
 import { v4 as uuidv4 } from 'uuid';
 
+// Class definition for the Comment model
 class Comment {
     constructor(body) {
         this.id = uuidv4();
@@ -44,5 +50,6 @@ class Comment {
     }
 }
 
+// Export the Comment model
 export default Comment;    
 <% } -%>

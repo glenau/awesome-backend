@@ -5,6 +5,7 @@
 <% if(database && databaseType === 'MongoDB') { -%>
 import { Schema, model } from 'mongoose';
 
+// Define the schema for the Article model
 const ArticleSchema = new Schema(
     {
         title: {
@@ -19,14 +20,17 @@ const ArticleSchema = new Schema(
     { versionKey: false, timestamps: true }
 );
 
+// Create the Article model using the defined schema
 const Article = model('articles', ArticleSchema);
 
+// Export the Article model
 export default Article;
 <% } -%>
 <% if(database && databaseType === 'PostgreSQL') { -%>
 import { DataTypes } from 'sequelize';
 import db from '../services/index.js';
 
+// Defining the Article model using Sequelize's define method
 const Article = db.sequelize.define('articles', {
     title: {
         type: DataTypes.STRING,
@@ -38,11 +42,13 @@ const Article = db.sequelize.define('articles', {
     },
 });
 
+// Export the Article model
 export default Article;
 <% } -%>
 <% if(!database) { -%>
 import { v4 as uuidv4 } from 'uuid';
 
+// Class definition for the Article model
 class Article {
     constructor(title, body) {
         this.id = uuidv4();
@@ -53,5 +59,6 @@ class Article {
     }
 }
 
+// Export the Article model
 export default Article;    
 <% } -%>

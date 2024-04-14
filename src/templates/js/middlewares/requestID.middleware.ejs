@@ -7,6 +7,7 @@ import logger from '../utils/logger.js';
 
 function setupRequestID(app) {
     app.use((req, res, next) => {
+        // Generating a unique ID for the request
         req.id = uuidv4();
         const request = req.method === 'POST' ? req.body : req.params;
         const requestData = request && Object.keys(request).length > 0 ? { request } : {};

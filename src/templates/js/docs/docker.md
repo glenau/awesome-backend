@@ -1,3 +1,5 @@
+# <%= projectName %>
+
 Documentation for working with Docker in the '<%= projectName %>' project.
 
 ```

@@ -13,6 +13,7 @@ import setupRouters from './routers.middleware.js';
 import setupNotFound from './notFound.middleware.js';
 import setupError from './error.middleware.js';
 
+// Object containing references to middleware functions used in the application
 const middlewares = {
 <% if(database) { -%>
     setupDatabase,

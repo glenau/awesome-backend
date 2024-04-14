@@ -11,13 +11,16 @@ import { idValidator } from '../validators/validator.js';
 import { createArticleValidator } from '../validators/article.validator.js';
 <% } -%>
 
+// Create a new instance of Router
 const router = Router();
 
-router.post('/',<% if(!database) { -%> createArticleValidator,<% } -%> ArticleController.createArticle);
-router.get('/', ArticleController.getArticles);
-router.get('/:id', idValidator, ArticleController.getArticleByID);
-router.put('/:id', idValidator, ArticleController.updateArticle);
-router.delete('/:id', idValidator, ArticleController.deleteArticle);
+// Define routes and their corresponding controller methods
+router.post('/',<% if(!database) { -%> createArticleValidator,<% } -%> ArticleController.createArticle); // Route for retrieving all articles
+router.get('/', ArticleController.getArticles); // Route for retrieving all articles
+router.get('/:id', idValidator, ArticleController.getArticleByID); // Route for retrieving an article by ID
+router.put('/:id', idValidator, ArticleController.updateArticle); // Route for updating an article by ID
+router.delete('/:id', idValidator, ArticleController.deleteArticle); // Route for deleting an article by ID
 
+// Export the router for use in other modules
 export default router;    
 <% } -%>

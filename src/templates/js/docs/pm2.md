@@ -1,3 +1,5 @@
+# <%= projectName %>
+
 Documentation for working with PM2 process manager in the '<%= projectName %>' project.
 
 ```

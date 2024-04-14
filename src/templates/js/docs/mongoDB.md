@@ -1,3 +1,5 @@
+# <%= projectName %>
+
 Documentation for working with <%= databaseType %> in the '<%= projectName %>' project.
 
 ```

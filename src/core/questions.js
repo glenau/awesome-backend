@@ -7,14 +7,17 @@
 import inquirer from 'inquirer';
 import chalk from 'chalk';
 
+// Class representing a set of questions to be asked in the CLI
 class Questions {
     constructor() {
+        // Array of questions for the CLI prompt
         this.questions = [
             {
                 type: 'input',
                 name: 'projectName',
                 message: 'What is your project named?',
                 default: 'awesome-backend',
+                // Validation function for the project name
                 validate: function (value) {
                     if (/^(?:(?:@(?:[a-z0-9-*~][a-z0-9-*._~]*)?\/[a-z0-9-._~])|[a-z0-9-~])[a-z0-9-._~]*$/.test(value)) {
                         return true;
@@ -34,6 +37,7 @@ class Questions {
                 name: 'serverPort',
                 message: 'What port do you want to run the web server on?',
                 default: '3000',
+                // Validation function for the server port
                 validate: function (value) {
                     if (/^(6553[0-5]|655[0-2]\d|65[0-4]\d{2}|6[0-4]\d{3}|[1-5]\d{4}|\d{1,4})$/.test(value)) {
                         return true;
@@ -67,6 +71,7 @@ class Questions {
                 when: function (answers) {
                     return answers.database;
                 },
+                // Validation function for the database name
                 validate: function (value) {
                     if (/^[a-z]+$/.test(value)) {
                         return true;
@@ -122,6 +127,7 @@ class Questions {
         ];
     }
 
+    // Method to start the CLI prompt and collect answers
     async start() {
         try {
             const answers = await inquirer.prompt(this.questions);
@@ -132,4 +138,5 @@ class Questions {
     }
 }
 
+// Export an instance of the Questions class
 export default new Questions();

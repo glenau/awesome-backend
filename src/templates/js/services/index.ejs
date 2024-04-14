@@ -6,6 +6,7 @@
 import mongoose from 'mongoose';
 import env from '../config/env.js';
 
+// Database object to create the connection
 const db = {
     mongoose,
     url: env.mongoUrl,
@@ -17,11 +18,13 @@ export default db;
 import { Sequelize } from 'sequelize';
 import env from '../config/env.js';
 
+// Sequelize object to create the connection
 const sequelize = new Sequelize(env.postgreSQLUrl, {
     logging: false,
     username: env.postgresSQLUser,
 });
 
+// Database object to create the connection
 const db = {
     sequelize,
     url: env.postgreSQLUrl,

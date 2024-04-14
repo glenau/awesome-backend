@@ -5,6 +5,7 @@
 <% if(database && databaseType === 'MongoDB')  { -%>
 import { Schema, model } from 'mongoose';
 
+// Define the schema for the Profile model
 const ProfileSchema = new Schema(
     {
         name: {
@@ -15,14 +16,17 @@ const ProfileSchema = new Schema(
     { versionKey: false, timestamps: true }
 );
 
+// Create the Profile model using the defined schema
 const Profile = model('profiles', ProfileSchema);
 
+// Export the Profile model
 export default Profile;
 <% } -%>
 <% if(database && databaseType === 'PostgreSQL') { -%>
 import { DataTypes } from 'sequelize';
 import db from '../services/index.js';
 
+// Defining the Profile model using Sequelize's define method
 const Profile = db.sequelize.define('profiles', {
     name: {
         type: DataTypes.STRING,
@@ -30,11 +34,13 @@ const Profile = db.sequelize.define('profiles', {
     },
 });
 
+// Export the Profile model
 export default Profile;
 <% } -%>
 <% if(!database) { -%>
 import { v4 as uuidv4 } from 'uuid';
 
+// Class definition for the Profile model
 class Profile {
     constructor(name) {
         this.id = uuidv4();
@@ -44,5 +50,6 @@ class Profile {
     }
 }
 
+// Export the Profile model
 export default Profile;    
 <% } -%>

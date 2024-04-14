@@ -11,13 +11,16 @@ import { idValidator } from '../validators/validator.js';
 import { createProfileValidator } from '../validators/profile.validator.js';
 <% } -%>
 
+// Create a new instance of Router
 const router = Router();
 
-router.post('/',<% if(!database) { -%> createProfileValidator,<% } -%>  ProfileController.createProfile);
-router.get('/', ProfileController.getProfiles);
-router.get('/:id', idValidator, ProfileController.getProfileByID);
-router.put('/:id', idValidator, ProfileController.updateProfile);
-router.delete('/:id', idValidator, ProfileController.deleteProfile);
+// Define routes and their corresponding controller methods
+router.post('/',<% if(!database) { -%> createProfileValidator,<% } -%>  ProfileController.createProfile); // Route for creating a new profile
+router.get('/', ProfileController.getProfiles); // Route for retrieving all profiles
+router.get('/:id', idValidator, ProfileController.getProfileByID); // Route for retrieving an profile by ID
+router.put('/:id', idValidator, ProfileController.updateProfile); // Route for updating an profile by ID
+router.delete('/:id', idValidator, ProfileController.deleteProfile); // Route for deleting an profile by ID
 
+// Export the router for use in other modules
 export default router;
 <% } -%>

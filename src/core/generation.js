@@ -11,16 +11,17 @@ import ejs from 'ejs';
 import chalk from 'chalk';
 import { exec } from 'child_process';
 
+// Class for generating project files based on user responses
 class Generation {
     // Initializing a class based on responses
     constructor(answers) {
-        this.answers = answers;
-        this.projectPath = this.setProjectPath();
-        this.projectLanguage = this.setProjectLanguage();
-        this.projectTemplatePath = this.setProjectTemplatePath();
-        this.projectFolders = this.setProjectFolders();
-        this.dependencies = this.setProjectDependencies();
-        this.ignoredFiles = this.setIgnoredFiles();
+        this.answers = answers; // User responses object
+        this.projectPath = this.setProjectPath(); // Path for the future project
+        this.projectLanguage = this.setProjectLanguage(); // Language for the project (currently hardcoded as JavaScript)
+        this.projectTemplatePath = this.setProjectTemplatePath(); // Path for code templates
+        this.projectFolders = this.setProjectFolders(); // List of project folders
+        this.dependencies = this.setProjectDependencies(); // List of project dependencies
+        this.ignoredFiles = this.setIgnoredFiles(); // List of ignored files based on user responses
     }
 
     // Setting the path for a future project
@@ -32,8 +33,9 @@ class Generation {
         return projectPath;
     }
 
+    // Set the language for the project
     setProjectLanguage() {
-        return 'js';
+        return 'js'; // Hardcoded as JavaScript for now
     }
 
     // Setting the path for code templates
@@ -48,6 +50,11 @@ class Generation {
     }
 
     setIgnoredFiles() {
+        /*
+            - Determine which files to ignore based on user responses
+            - Ignored files will not be generated
+            - Adjustments can be made here to include additional ignored files based on future requirements
+        */
         const files = {};
         if (!this.answers.database) {
             files['middlewares/database.middleware.ejs'] = true;
@@ -373,6 +380,8 @@ class Generation {
             content += `\n### Express\n`;
             content += `\n-   Server port: \`${this.answers.serverPort}\`\n`;
             content += `-   API entry point: \`localhost:${this.answers.serverPort}/api\`\n`;
+            content += `\n-   Start your application:`;
+            content += `\n    \`\`\`bash\n    npm run start\n    \`\`\`\n`;
             content += `\n_You can find detailed information in the [Express package](https://www.npmjs.com/package/express)._\n`;
         }
 

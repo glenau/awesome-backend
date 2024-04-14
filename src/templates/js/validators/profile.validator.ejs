@@ -4,14 +4,18 @@
 
 import Response from '../utils/response.js';
 
+// Middleware function to validate profile creation request
 function createProfileValidator(req, res, next) {
+    // Extract the name from the request body
     const name = req.body.name;
     if (!name) {
         Response.failure(req, res, 'Parameter name is missing', 400);
         return;
     }
 
+    // If name is present, proceed to the next middleware
     next();
 }
 
+// Export the createProfileValidator middleware function
 export { createProfileValidator }

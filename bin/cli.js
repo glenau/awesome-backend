@@ -15,14 +15,16 @@ import { fileURLToPath } from 'url';
 import { exec } from 'child_process';
 import os from 'os';
 
+// Function to run the project generation process
 async function run() {
+    // Get the Node.js version
     const nodeVersion = process.version;
     const majorVersion = parseInt(nodeVersion.slice(1), 10);
     let databaseWarning = false;
     let pmWarning = false;
     let dockerWarning = false;
 
-    // Node.js minimum version warning
+    // Display a warning if the Node.js version is below the minimum requirement
     if (majorVersion < 18) {
         console.log(chalk.yellow.bold('The minimum required Node.js version is 20 or higher. Please update your version and try again'));
         console.log(chalk.yellow.bold('Current version: ') + chalk.red.bold(nodeVersion));
@@ -30,6 +32,7 @@ async function run() {
         return;
     } else {
         try {
+            // Display the version of the awesome-backend package
             const currentDir = path.dirname(fileURLToPath(import.meta.url));
             const data = fs.readFileSync(`${path.join(currentDir, '..', 'package.json')}`, 'utf8');
             const packageJson = JSON.parse(data);
@@ -48,7 +51,7 @@ async function run() {
         // User for the database
         answers.user = os.userInfo().username;
 
-        // Checking MongoDB
+        // Check if MongoDB is installed
         if (answers.database && answers.databaseType === 'MongoDB') {
             await new Promise((resolve, reject) => {
                 exec('mongod --version', (err, stdout, stderr) => {
@@ -63,7 +66,7 @@ async function run() {
             });
         }
 
-        // Checking PostgreSQL
+        // Check if PostgreSQL is installed
         if (answers.database && answers.databaseType === 'PostgreSQL') {
             await new Promise((resolve, reject) => {
                 exec('psql --version', (err, stdout, stderr) => {
@@ -80,7 +83,7 @@ async function run() {
 
         // Checking advanced features
         if (answers.moreOptions) {
-            // Checking PM2
+            // Check if PM2 is installed
             if (answers.pm2Support) {
                 await new Promise((resolve, reject) => {
                     exec('pm2 -v', (err, stdout, stderr) => {
@@ -95,7 +98,7 @@ async function run() {
                 });
             }
 
-            // Checking Docker
+            // Check if Docker is installed
             if (answers.dockerSupport) {
                 await new Promise((resolve, reject) => {
                     exec('docker -v', (err, stdout, stderr) => {
@@ -114,7 +117,7 @@ async function run() {
         // Starting the project generation process
         await new Generation(answers).start();
 
-        // Checking warnings
+        // Display warnings
         if (answers.database) {
             if (!databaseWarning) {
                 console.log(chalk.cyan.bold('Great! Open your project and start it with the command:'));
@@ -148,6 +151,7 @@ async function run() {
             }
         }
 
+        // Display documentation paths
         console.log(chalk.cyan.bold('Documentation for your project can be found in the docs folder:'));
 
         if (answers.moreOptions && answers.dockerSupport) {
@@ -184,9 +188,11 @@ async function run() {
             chalk.white.bold('- ') + chalk.green.bold(`${answers.projectName}.md`) + chalk.white.bold(' (General project documentation)')
         );
         console.log(chalk.magenta.bold('\nAt this point I say goodbye and wish you good luck!'));
+        console.log(chalk.magenta.bold('We are on GitHub: https://github.com/glenau/awesome-backend'));
     } catch (err) {
         console.log(chalk.red.bold(err));
     }
 }
 
+// Called when the user accesses 'npx awesome-backend'
 run();

@@ -4,14 +4,18 @@
 
 import Response from '../utils/response.js';
 
+// Middleware function to validate comment creation request
 function createCommentValidator(req, res, next) {
+    // Extract the body from the request body
     const body = req.body.body;
     if (!body) {
         Response.failure(req, res, 'Parameter body is missing', 400);
         return;
     }
 
+    // If body is present, proceed to the next middleware
     next();
 }
 
+// Export the createCommentValidator middleware function
 export { createCommentValidator }

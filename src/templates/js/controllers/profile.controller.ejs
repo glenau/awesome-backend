@@ -6,39 +6,48 @@
 import ProfileService from '../services/profile.service.js';
 import Response from '../utils/response.js';
 
+// Controller class for handling profile-related operations
 class ProfileController {
+    // Method to create a new profile
     async createProfile(req, res, next) {;
         try {
             const profile = await ProfileService.createProfile(req.body);
             Response.success(req, res, profile);
         } catch (err) {
+            // Pass any errors to the error handling middleware
             next(err);
         }
     }
 
+    // Method to get all profiles
     async getProfiles(req, res, next) {;
         try {
             const profiles = await ProfileService.findProfiles();
             Response.success(req, res, profiles);
         } catch (err) {
+            // Pass any errors to the error handling middleware
             next(err);
         }
     }
 
+    // Method to get an profile by its ID
     async getProfileByID(req, res, next) {;
         try {
             const profile = await ProfileService.findProfileByID(req.params.id);
             Response.success(req, res, profile);
         } catch (err) {
+            // Pass any errors to the error handling middleware
             next(err);
         }
     }
 
+    // Method to update an profile
     async updateProfile(req, res, next) {;
         try {
             const profile = await ProfileService.updateProfileByID(req.params.id, req.body);
             Response.success(req, res, profile);
         } catch (err) {
+            // Pass any errors to the error handling middleware
             next(err);
         }
     }
@@ -48,9 +57,11 @@ class ProfileController {
             const result = await ProfileService.deleteProfileByID(req.params.id);
             Response.success(req, res, result);
         } catch (err) {
+            // Pass any errors to the error handling middleware
             next(err);
         }
     }
 }
 
+// Export an instance of the ProfileController class
 export default new ProfileController();

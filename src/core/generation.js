@@ -17,10 +17,12 @@ class Generation {
     constructor(answers) {
         this.answers = answers; // User responses object
         this.projectPath = this.setProjectPath(); // Path for the future project
-        this.projectLanguage = this.setProjectLanguage(); // Language for the project (currently hardcoded as JavaScript)
+        this.projectLanguage = this.setProjectLanguage(); // Language for the project
         this.projectTemplatePath = this.setProjectTemplatePath(); // Path for code templates
+        this.projectDocsPath = this.setProjectDocsPath(); // Path for docs templates
         this.projectFolders = this.setProjectFolders(); // List of project folders
         this.dependencies = this.setProjectDependencies(); // List of project dependencies
+        this.devDependencies = this.setProjectDevDependencies(); // List of project devDependencies
         this.ignoredFiles = this.setIgnoredFiles(); // List of ignored files based on user responses
     }
 
@@ -35,7 +37,7 @@ class Generation {
 
     // Set the language for the project
     setProjectLanguage() {
-        return 'js'; // Hardcoded as JavaScript for now
+        return this.answers.projectLanguage;
     }
 
     // Setting the path for code templates
@@ -44,45 +46,54 @@ class Generation {
         return path.join(currentDir, '..', 'templates/' + this.projectLanguage);
     }
 
+    // Setting the path for docs templates
+    setProjectDocsPath() {
+        const currentDir = path.dirname(fileURLToPath(import.meta.url));
+        return path.join(currentDir, '..', 'templates/docs');
+    }
+
     // Setting the project folder list
     setProjectFolders() {
         return ['config', 'controllers', 'middlewares', 'models', 'routers', 'services', 'utils', 'validators', 'docs'];
     }
 
+    // Defining ignored files in a project
     setIgnoredFiles() {
-        /*
-            - Determine which files to ignore based on user responses
-            - Ignored files will not be generated
-            - Adjustments can be made here to include additional ignored files based on future requirements
-        */
+        // Ignored files object
         const files = {};
+
         if (!this.answers.database) {
             files['middlewares/database.middleware.ejs'] = true;
             files['services/index.ejs'] = true;
-            files['docs/mongoDB.md'] = true;
-            files['docs/postgreSQL.md'] = true;
+            // Ignoring documentation files in the docs folder
+            files['mongoDB.md'] = true;
+            files['postgreSQL.md'] = true;
         } else {
             files['validators/article.validator.ejs'] = true;
             files['validators/comment.validator.ejs'] = true;
             files['validators/profile.validator.ejs'] = true;
 
             if (this.answers.databaseType === 'MongoDB') {
-                files['docs/postgreSQL.md'] = true;
+                // Ignoring documentation files in the docs folder
+                files['postgreSQL.md'] = true;
             }
 
             if (this.answers.databaseType === 'PostgreSQL') {
-                files['docs/mongoDB.md'] = true;
+                // Ignoring documentation files in the docs folder
+                files['mongoDB.md'] = true;
             }
         }
 
         if (!this.answers.pm2Support) {
-            files['docs/pm2.md'] = true;
             files['ecosystem.config.ejs'] = true;
+            // Ignoring documentation files in the docs folder
+            files['pm2.md'] = true;
         }
 
         if (!this.answers.dockerSupport) {
-            files['docs/docker.md'] = true;
             files['Dockerfile'] = true;
+            // Ignoring documentation files in the docs folder
+            files['docker.md'] = true;
         }
 
         if (!this.answers.compressionSupport) {
@@ -110,6 +121,19 @@ class Generation {
             dependencies.push('compression');
         }
         return dependencies;
+    }
+
+    // Setting a list of required devDependencies for a project
+    setProjectDevDependencies() {
+        const devDependencies = [];
+        if (this.answers.projectLanguage === 'ts') {
+            devDependencies.push('typescript');
+            devDependencies.push('ts-node');
+            if (this.answers.webFramework === 'express') {
+                devDependencies.push('@types/express');
+            }
+        }
+        return devDependencies;
     }
 
     // Starting a process to generate a server application
@@ -175,20 +199,38 @@ class Generation {
     // Creating a list of files required for the project
     async createProjectFilesFromTemplates() {
         process.stdout.write(chalk.white.bold('[Step 3: Generating project files] - '));
+
+        // Obtaining project source files
         const projectFiles = await this.getProjectFiles(this.projectTemplatePath);
         for (const fileName of projectFiles) {
             if (!this.ignoredFiles[fileName]) {
-                await this.generateAndWriteFile(fileName);
+                await this.generateAndWriteFile(fileName, this.projectTemplatePath);
             }
         }
-        await this.generateAndWriteFile('.env.example', '.env');
+
+        // Obtaining project documentation
+        const docsFiles = await this.getProjectFiles(this.projectDocsPath);
+        for (const fileName of docsFiles) {
+            if (!this.ignoredFiles[fileName]) {
+                await this.generateAndWriteFile(fileName, this.projectDocsPath);
+            }
+        }
+
+        // Exception .env file for creation by template
+        await this.generateAndWriteFile('.env.example', this.projectTemplatePath, '.env');
         process.stdout.write(chalk.green.bold('OK\n'));
     }
 
     // Transformation of templates from .ejs to .js format using user parameters
-    async generateAndWriteFile(sourceFileName, targetFileName = sourceFileName.replace(/\.ejs$/, '.' + this.projectLanguage)) {
-        const fileTemplatePath = path.join(this.projectTemplatePath, sourceFileName);
-        const fileProjectPath = path.join(this.projectPath, targetFileName);
+    async generateAndWriteFile(sourceFileName, pathFiles, targetFileName = sourceFileName.replace(/\.ejs$/, '.' + this.projectLanguage)) {
+        const fileTemplatePath = path.join(pathFiles, sourceFileName);
+        let fileProjectPath = path.join(this.projectPath, targetFileName);
+
+        // Changing the directory for separate reading of documentation
+        if (pathFiles === this.projectDocsPath) {
+            fileProjectPath = path.join(this.projectPath + '/docs', targetFileName);
+        }
+
         try {
             const str = await ejs.renderFile(fileTemplatePath, this.answers);
             fs.writeFileSync(fileProjectPath, str);
@@ -219,17 +261,37 @@ class Generation {
         process.stdout.write(chalk.white.bold('[Step 4: Installing dependencies] - '));
         const command = `npm install ${this.dependencies.join(' ')}`;
 
+        // Installing dependencies
         await new Promise((resolve, reject) => {
             exec(command, { cwd: this.projectPath }, (err, stdout, stderr) => {
                 if (err) {
                     console.error(chalk.red.bold(`Error installing dependencies: ${err.message}\n`));
                     reject(err);
                 } else {
-                    process.stdout.write(chalk.green.bold('OK\n'));
+                    if (this.devDependencies.length == 0) {
+                        process.stdout.write(chalk.green.bold('OK\n'));
+                    }
                     resolve();
                 }
             });
         });
+
+        // Installing development dependencies
+        if (this.devDependencies.length > 0) {
+            const command = `npm install -D ${this.devDependencies.join(' ')}`;
+
+            await new Promise((resolve, reject) => {
+                exec(command, { cwd: this.projectPath }, (err, stdout, stderr) => {
+                    if (err) {
+                        console.error(chalk.red.bold(`Error installing devDependencies: ${err.message}\n`));
+                        reject(err);
+                    } else {
+                        process.stdout.write(chalk.green.bold('OK\n'));
+                        resolve();
+                    }
+                });
+            });
+        }
     }
 
     // Creating documentation for the project

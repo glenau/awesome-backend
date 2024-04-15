@@ -8,7 +8,7 @@ module.exports = {
     apps: [
         {
             // Unique name for the application
-            name: 'awesome-backend',
+            name: '<%= projectName %>',
             // Entry point script for the application
             script: 'index.js',
             // Number of instances to be spawned for the application

@@ -28,6 +28,15 @@ class Questions {
             },
             {
                 type: 'list',
+                name: 'projectLanguage',
+                message: 'Which language will you choose?',
+                choices: [
+                    { name: 'JavaScript', value: 'js' },
+                    //   { name: 'TypeScript', value: 'ts' },
+                ],
+            },
+            {
+                type: 'list',
                 name: 'webFramework',
                 message: 'Which web server framework do you prefer?',
                 choices: [{ name: 'Express', value: 'express' }],

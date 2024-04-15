@@ -10,10 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 -   Middleware for data compression
+-   Development dependency support
 
 ### Changed
 
 -   Moved the changes section to a separate CHANGELOG.md file
+-   Generation of documentation is placed in a separate folder
 
 ## [0.1.5] - 2024-04-14
 

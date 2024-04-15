@@ -5,6 +5,9 @@
 <% if(database) { -%>
 import setupDatabase from './database.middleware.js';
 <% } -%>
+<% if (moreOptions && compressionSupport && webFramework === 'express') { -%>
+import setupCompression from './compression.middleware.js';
+<% } -%>
 import setupSecurityHeaders from './security.middleware.js';
 import setupJsonParser from './json.middleware.js';
 import setupUrlEncodedParser from './urlEncoded.middleware.js';
@@ -17,6 +20,9 @@ import setupError from './error.middleware.js';
 const middlewares = {
 <% if(database) { -%>
     setupDatabase,
+<% } -%>
+<% if (moreOptions && compressionSupport && webFramework === 'express') { -%>
+    setupCompression,
 <% } -%>
     setupSecurityHeaders,
     setupJsonParser,

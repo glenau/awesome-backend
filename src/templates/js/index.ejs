@@ -13,12 +13,16 @@ import logger from './utils/logger.js';
 // Create an Express application instance
 const app = express();
 <% } -%>
+
 // Get the server port from the environment configuration
 const serverPort = env.serverPort;
 
 // Setup middlewares
 <% if(database) { -%>
 middlewares.setupDatabase(); // Setup database connection
+<% } -%>
+<% if (moreOptions && compressionSupport && webFramework === 'express') { -%>
+middlewares.setupCompression(app); // Setting data compression
 <% } -%>
 middlewares.setupSecurityHeaders(app); // Setup security headers
 middlewares.setupJsonParser(app); // Setup JSON body parser
@@ -33,6 +37,7 @@ app.listen(serverPort, (err) => {
     if (err) {
         logger.error(err, 'Error starting the server');
         process.exit(1);
+    } else {
+        logger.info(`Server is running at URL - localhost:${serverPort}`);
     }
-  logger.info(`Server is running at URL - localhost:${serverPort}`);
 });

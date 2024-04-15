@@ -23,18 +23,7 @@ Before installing, [download and install Node.js](https://nodejs.org/en/download
 
 ## Changelog
 
-### Version 0.1.5
-
--   Added extended comments
-
-### Version 0.1.4
-
--   Added automatic publishing of packages to the NPM registry
-
-### Version 0.1.3
-
--   Added a collection of requests for Postman
--   Added Docker support
+For a detailed list of changes in each version, please refer to the [CHANGELOG](CHANGELOG.md) file.
 
 ## Roadmap
 
@@ -48,6 +37,7 @@ Before installing, [download and install Node.js](https://nodejs.org/en/download
 -   [ ] Tools
     -   [x] [PM2](https://www.npmjs.com/package/pm2)
     -   [x] [Docker](https://www.docker.com/)
+    -   [x] [Compression](https://www.npmjs.com/package/compression)
     -   [ ] [TypeScript](https://www.npmjs.com/package/typescript)
     -   [ ] [WebSockets](https://www.npmjs.com/package/ws)
     -   [ ] [Redis](https://www.npmjs.com/package/redis)

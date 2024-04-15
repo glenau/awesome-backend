@@ -28,6 +28,15 @@ class Questions {
             },
             {
                 type: 'list',
+                name: 'projectLanguage',
+                message: 'Which language will you choose?',
+                choices: [
+                    { name: 'JavaScript', value: 'js' },
+                    //   { name: 'TypeScript', value: 'ts' },
+                ],
+            },
+            {
+                type: 'list',
                 name: 'webFramework',
                 message: 'Which web server framework do you prefer?',
                 choices: [{ name: 'Express', value: 'express' }],
@@ -118,6 +127,18 @@ class Questions {
                 message: 'Want to add Docker support?',
                 when: function (answers) {
                     return answers.moreOptions;
+                },
+                choices: [
+                    { name: 'Yes', value: true },
+                    { name: 'No', value: false },
+                ],
+            },
+            {
+                type: 'list',
+                name: 'compressionSupport',
+                message: 'Want to add data compression capabilities?',
+                when: function (answers) {
+                    return answers.moreOptions && answers.webFramework === 'express';
                 },
                 choices: [
                     { name: 'Yes', value: true },
